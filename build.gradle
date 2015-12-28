@@ -1,0 +1,160 @@
+
+plugins {
+	id "java"
+	id "com.bmuschko.izpack" version "2.1"	// For building cross-platform installers
+	id "nebula.ospackage" version "3.1.0"	// For building deb and rpm packages
+}
+
+version = "0.1-SNAPSHOT"
+description = "Enhances Alice 3.2 STransport subclasses to include methods for interacting with the Finch robot"
+
+ext.aliceLibDir = detectAliceLibDir()	// To specify a specific path, use -PaliceLibDir=/path/to/alice3/lib
+
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+	// Use 'jcenter' for resolving your dependencies.
+	// You can declare any Maven/Ivy/file repository here.
+	jcenter()
+
+	//mavenCentral()
+}
+
+/**
+ * Attempts to determine the lib path of an Alice 3 installation.
+ *
+ * The path returned may be specified on the command line by passing -PaliceLibDir=/path/to/alice3/lib
+ * Otherwise, the following OS-specific defaults will be used:
+ *   Windows: C:\Program Files\Alice 3\lib
+ *   Linux: ~/Alice3/lib
+ *   Mac OSX: ~/Alice3/lib
+ */
+String detectAliceLibDir() {
+	if (project.hasProperty('aliceLibDir')) {
+		return project.aliceLibDir;
+	} else {
+		def os = org.gradle.internal.os.OperatingSystem.current()
+		if (os.isWindows()) {
+			return "C:\\Program Files\\Alice 3\\lib"
+		} else if (os.isMacOSX()) {
+			return "~/Alice3/lib"
+		} else if (os.isUnix()) {
+			return "~/Alice3/lib"
+		}
+	}
+} // detectAliceLibDir
+
+/**
+ * Returns the paths of all of the Jars in the Alice lib dir
+ */
+FileCollection aliceLibJars() {
+	return fileTree(dir: aliceLibDir, include: "**/*.jar")
+} // aliceLibJars
+
+configurations {
+	provided	// This configuration is used to append the Alice library Jars to the compile classpath without affecting the runtime classpath
+}
+
+// In this section you declare the dependencies for your production and test code
+dependencies {
+	// Determines the Alice library Jar paths
+	provided aliceLibJars()
+
+	// The production code uses the SLF4J logging API at compile time
+	compile 'org.slf4j:slf4j-api:1.7.13'
+
+	// Declare the dependency for your favourite test framework you want to use in your tests.
+	// TestNG is also supported by the Gradle Test task. Just change the
+	// testCompile dependency to testCompile 'org.testng:testng:6.8.1' and add
+	// 'test.useTestNG()' to your build script.
+	testCompile 'junit:junit:4.12'
+}
+
+// Append the Alice Jars to the compile class path
+sourceSets.main.compileClasspath += configurations.provided
+
+// Configuration for building the installer package using izpack
+izpack {
+	compression = 'deflate'
+	compressionLevel = 9
+	appProperties = [
+		'app.group': 'finch4alice',
+		'app.name': 'finch4alice',
+		'app.title': 'Finch4Alice',
+		'app.version': version,
+		'app.subpath': "Finch4Alice-$version"
+	]
+}
+
+
+
+ospackage {
+	packageName = project.name
+	version = project.version
+	summary = project.description
+	release = '1'
+	//arch = I386
+	arch = "all"
+	os = LINUX
+
+	user = "root"
+	permissionGroup = "root"
+	url = "http://www.finch4alice.org/"
+	
+	installUtils file('scripts/rpm/utils.sh')
+	preInstall file('scripts/rpm/preInstall.sh')
+	postInstall file('scripts/rpm/postInstall.sh')
+	preUninstall 'touch /tmp/myfile'
+	postUninstall file('scripts/rpm/postUninstall.sh')
+
+	requires('qux')
+
+	into '/opt/foo'
+
+	from(jar.outputs.files) {
+		into 'lib'
+	}
+	from(configurations.runtime) {
+		into 'lib'
+	}
+	from('lib') {
+		into 'lib'
+	}
+	from('scripts') {
+		into 'bin'
+		exclude 'database'
+		fileMode = 0550
+	}
+	from('src/main/resources') {
+		fileType CONFIG | NOREPLACE
+		into 'conf'
+	}
+	from('home') {
+		// Creating directory entries (or not) in the RPM is normally left up to redline-rpm library.
+		// Use this to explicitly create an entry -- for setting directory fileMode on system directories.
+		createDirectoryEntry = true
+		fileMode = 0500
+		into 'home'
+	}
+	from('endorsed') {
+		// Will tell redline-rpm not to auto create directories, which
+		// is sometimes necessary to avoid rpm directory conflicts
+		addParentDirs = false
+		into '/usr/share/tomcat/endorsed'
+	}
+
+}
+
+buildRpm {
+//	requires('bar', '2.2', GREATER | EQUAL)
+//	requires('baz', '1.0.1', LESS)
+//	link('/etc/init.d/foo', '/opt/foo/bin/foo.init')
+}
+
+buildDeb {
+//	requires('bat', '1.0.1')
+//	link('/etc/init.d/foo', '/opt/foo/bin/foo.upstart')
+//	configurationFiles file('/etc/myapp/myapp.conf')
+}
+
+
