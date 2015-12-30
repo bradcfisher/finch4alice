@@ -1,3 +1,9 @@
+/**
+ * Finch 4 Alice is released under the BSD 2-Clause License
+ *
+ * Copyright (c) 2015, Brad Fisher
+ * All rights reserved.
+ */
 package com.finch4alice;
 
 import java.awt.Color;
@@ -22,16 +28,21 @@ import java.util.Arrays;
 /**
  * Simple wrapper class to communicate with the Bird Brain Robot Server.
  *
- * https://github.com/BirdBrainTechnologies/BirdBrainRobotServer/
+ * <p>The API of this class is intended to mimic that of the edu.cmu.ri.createlab.terk.robot.finch.Finch
+ * class as closely as possible.</p>
  *
- * The API of this class is intended to mimic that of the edu.cmu.ri.createlab.terk.robot.finch.Finch
- * class as closely as possible.
+ * <p>Due to limitations of the Bird Brain Robot Server, some functionality of the Finch is currently
+ * unsupported.  This currently includes the {@code playTone}, {@code playClip}, {@code isShaken},
+ * and {@code isTapped} methods.</p>
  *
- * Due to limitations of the Bird Brain Robot Server
+ * @see <a href="https://github.com/BirdBrainTechnologies/BirdBrainRobotServer/">The BirdBrain Robot Server</a>
  */
 public class FinchHTTP {
 
-	protected String _serverBaseURL;
+	/**
+	 * Private storage for the serverBaseURL property.
+	 */
+	private String _serverBaseURL;
 
 	/**
 	 * Constructs a new FinchHTTP instance using the default server URL of "http://localhost:22179/".
@@ -73,7 +84,7 @@ public class FinchHTTP {
 	 * @param	value	The integer value to convert to a string.
 	 * @return	The value formatted as a string.
 	 */
-	protected String formatInt(int value) {
+	private String formatInt(int value) {
 		return Integer.toString(value);
 	} // formatInt
 
@@ -83,23 +94,24 @@ public class FinchHTTP {
 	 * @param	value	The double value to convert to a string.
 	 * @return	The value formatted as a string.
 	 */
-	protected String formatDouble(double value) {
+	private String formatDouble(double value) {
 		return new DecimalFormat("#.##").format(value);
 	} // formatDouble
 
 	/**
 	 * Executes an HTTP GET request to the Bird Brain Robot Server.
-	 * @param	path	
+	 * @param	path	Relative path from the server root URL of the service to request
 	 * @param	args	Array of arguments for the request.  Each argument in this array is appended
 	 * 					to the request URL separated by slashes.
 	 * @return	The response returned by the server on success.  Returns "null" if a connection
 	 *			could not be established to the specified server.
 	 */
-	protected String httpGET(String path, String... args) {
+	private String httpGET(String path, String... args) {
 		//System.out.println("httpGET: path="+ path +" args="+ (args == null ? "null" : Arrays.toString(args)));
 
 		String utf8 = java.nio.charset.StandardCharsets.UTF_8.name();
-		String fullURL = _serverBaseURL + (_serverBaseURL.endsWith("/") ? "" : "/") + path;
+		String baseURL = getServerBaseURL();
+		String fullURL = baseURL + (baseURL.endsWith("/") ? "" : "/") + path;
 		for (int i = 0; i < args.length; ++i) {
 			String arg = "?";
 			try {
@@ -140,7 +152,7 @@ public class FinchHTTP {
 				}
 			}
 		} catch (ConnectException e) {
-			System.out.println("WARNING: Unable to connect to Bird Brain Robot Server at "+ _serverBaseURL);
+			System.out.println("WARNING: Unable to connect to Bird Brain Robot Server at "+ baseURL);
 			response = "null";
 		} catch (IOException e) {
 			throw new RuntimeException("Unexpected Exception", e);
@@ -155,7 +167,7 @@ public class FinchHTTP {
 	 * is received.
 	 * @param	result	The response received from the server.
 	 */
-	protected void validateOutResult(String result) {
+	private void validateOutResult(String result) {
 		if (!"Output set".equals(result) && !"null".equals(result))
 			System.out.println("Unexpected result: '"+ result +"'");
 	} // validateOutResult
@@ -232,7 +244,7 @@ public class FinchHTTP {
 	 *   myFinch.saySomething("My light sensor has a value of "+ lightSensor + " and temperature is " + tempInCelcius);
 	 *
 	 * @param	sayThis		The string of text that will be spoken by the computer
-	 * @param	duration	
+	 * @param	duration	The time to block while playing the sound in milliseconds
 	 */
 	public void saySomething(String sayThis, int duration) {
 		saySomething(sayThis);
@@ -252,8 +264,8 @@ public class FinchHTTP {
 	 * @param	frequency	The frequency of the tone in Hertz
 	 * @param	duration	The time to play the tone in milliseconds
 	 * 
-	 * @todo	NOT IMPLEMENTED: The Bird Brain Robot Server doesn't currently provide support for
-	 *			this functionality.
+	 * @throws UnsupportedOperationException	Since the Bird Brain Robot Server doesn't currently
+	 *											provide support for this functionality.
 	 */
 	public void playTone(int frequency, int duration) {
 // TODO: Verify the volume should be 10
@@ -274,10 +286,12 @@ public class FinchHTTP {
 	 * @param	volume		The volume of the tone on a 1 to 10 scale
 	 * @param	duration	The time to play the tone in milliseconds
 	 * 
-	 * @todo	NOT IMPLEMENTED: The Bird Brain Robot Server doesn't currently provide support for
-	 *			this functionality.
+	 * @throws UnsupportedOperationException	Since the Bird Brain Robot Server doesn't currently
+	 *											provide support for this functionality.
 	 */
 	public void playTone(int frequency, int volume, int duration) {
+		// TODO: NOT IMPLEMENTED: The Bird Brain Robot Server doesn't currently provide support for
+		//		this functionality.
 		throw new UnsupportedOperationException("playTone is not implemented");
 	} // playTone
 
@@ -287,11 +301,19 @@ public class FinchHTTP {
 	 * If you place the audio file in the same path as your source, you can just specify the
 	 * name of the file.
 	 *
-	 * @todo	NOT IMPLEMENTED: The Bird Brain Robot Server doesn't currently provide support for
-	 *			this functionality.  If this is implemented, the clip should be read locally and
-	 *			sent to the server to be played remotely.
+	 * @param	fileLocation	The path to the file to play.  The file path specified here is
+	 *							local to the current JVM.  The sound file will be sent to the
+	 *							server to be played remotely.
+	 *
+	 * @throws UnsupportedOperationException	Since the Bird Brain Robot Server doesn't currently
+	 *											provide support for this functionality.
 	 */
 	public void playClip(String fileLocation) {
+		/*
+		TODO: NOT IMPLEMENTED: The Bird Brain Robot Server doesn't currently provide support for
+				this functionality.  If this is implemented, the clip should be read locally and
+				sent to the server to be played remotely.
+		*/
 		throw new UnsupportedOperationException("playClip is not implemented");
 	} // playClip
 
@@ -344,12 +366,11 @@ public class FinchHTTP {
 	 *
 	 * @param	limit	The value the light sensor needs to exceed
 	 * @return	whether the light sensor exceeds the value specified by limit
-	 *
-	 * @todo	The javadoc on finchrobot.com is contradictory about what this function returns.
-	 *			Need to review source to determine actual behavior (eg. return true if > limit or
-	 *			if < limit?)
 	 */
 	public boolean isLeftLightSensor(double limit) {
+		// TODO: The javadoc on finchrobot.com is contradictory about what this function returns.
+		//		Need to review source to determine actual behavior (eg. return true if > limit or
+		//		if < limit?)
 		return (getLeftLightSensor() > limit);
 	} // isLeftLightSensor
 
@@ -358,12 +379,11 @@ public class FinchHTTP {
 	 *
 	 * @param	limit	The value the light sensor needs to exceed
 	 * @return	whether the light sensor exceeds the value specified by limit
-	 *
-	 * @todo	The javadoc on finchrobot.com is contradictory about what this function returns.
-	 *			Need to review source to determine actual behavior (eg. return true if > limit or
-	 *			if < limit?)
 	 */
 	public boolean isRightLightSensor(double limit) {
+		// TODO: The javadoc on finchrobot.com is contradictory about what this function returns.
+		//		Need to review source to determine actual behavior (eg. return true if > limit or
+		//		if < limit?)
 		return (getRightLightSensor() > limit);
 	} // isRightLightSensor
 
@@ -409,12 +429,12 @@ public class FinchHTTP {
 
 	/**
 	 * This method uses Thread.sleep to cause the currently running program to sleep for the
-	 * specified number of seconds.
+	 * specified number of milliseconds.
 	 *
 	 * Note, this method may return before the specified number of milliseconds have elapsed, if
 	 * the thread has been interrupted (eg. signalled to terminate).
 	 *
-	 * @param	ms	the number of milliseconds to sleep for. Valid values are all positive integers.
+	 * @param	ms	The number of milliseconds to sleep for. Valid values are all positive integers.
 	 */
 	public void sleep(int ms) {
 		try {
@@ -654,35 +674,35 @@ public class FinchHTTP {
 	/**
 	 * Returns true if the Finch has been shaken since the last call to the method.
 	 * @return	true if the Finch was recently shaken
-	 * @todo	NOT IMPLEMENTED: The Bird Brain Robot Server doesn't currently support this property.
+	 * @throws UnsupportedOperationException	Since the Bird Brain Robot Server doesn't currently
+	 *											provide support for this functionality.
 	 */
 	public boolean isShaken() {
-		// TODO: Determine if there is a route for this
+		// TODO: NOT IMPLEMENTED: The Bird Brain Robot Server doesn't currently support this property.
 		throw new UnsupportedOperationException("isShaken is not implemented");
 	} // isShaken
 
 	/**
 	 * Returns true if the Finch has been tapped since the last call to the method.
 	 * @return	true if the Finch was recently tapped
-	 * @todo	NOT IMPLEMENTED: The Bird Brain Robot Server doesn't currently support this property.
+	 * @throws UnsupportedOperationException	Since the Bird Brain Robot Server doesn't currently
+	 *											provide support for this functionality.
 	 */
 	public boolean isTapped() {
-		// TODO: Determine if there is a route for this
+		// TODO: NOT IMPLEMENTED: The Bird Brain Robot Server doesn't currently support this property.
 		throw new UnsupportedOperationException("isTapped is not implemented");
 	} // isTapped
 
 	/**
 	 * Returns true if the temperature is less than the value specified by limit, false otherwise.
 	 *
-	 * @param	limit	The value the temperature needs to exceed
+	 * @param	limit	The value the temperature needs to exceed in Celcius
 	 * @return	true if the temperature exceeds the value specified by limit
-	 *
-	 * @todo	The javadoc on finchrobot.com is contradictory about what this function returns.
-	 *			Need to review source to determine actual behavior (eg. return true if > limit or
-	 *			if < limit?)
 	 */
 	public boolean isTemperature(double limit) {
-		// TODO: javadoc on finchrobot.com is contradictory about what this function returns.  Need to review source to determine actual behavior (eg. return true if > limit or if < limit?)
+		// TODO: The javadoc on finchrobot.com is contradictory about what this function returns.
+		//		Need to review source to determine actual behavior (eg. return true if > limit or
+		//		if < limit?)
 		return (getTemperature() > limit);
 	} // isTemperature
 

@@ -7,17 +7,21 @@ plugins {
 
 version = "0.1-SNAPSHOT"
 description = "Enhances Alice 3.2 STransport subclasses to include methods for interacting with the Finch robot"
+sourceCompatibility = 1.6
 
 ext.aliceLibDir = detectAliceLibDir()	// To specify a specific path, use -PaliceLibDir=/path/to/alice3/lib
 
-
-// In this section you declare where to find the dependencies of your project
 repositories {
 	// Use 'jcenter' for resolving your dependencies.
 	// You can declare any Maven/Ivy/file repository here.
 	jcenter()
 
 	//mavenCentral()
+}
+
+// Ensure the Java compilation tasks perform extra checks on the code
+tasks.withType(JavaCompile) {
+	options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 }
 
 /**
@@ -73,6 +77,8 @@ dependencies {
 // Append the Alice Jars to the compile class path
 sourceSets.main.compileClasspath += configurations.provided
 
+javadoc.classpath = sourceSets.main.compileClasspath
+
 // Configuration for building the installer package using izpack
 izpack {
 	compression = 'deflate'
@@ -90,17 +96,16 @@ izpack {
 
 ospackage {
 	packageName = project.name
-	version = project.version
 	summary = project.description
-	release = '1'
-	//arch = I386
-	arch = "all"
+
 	os = LINUX
 
-	user = "root"
-	permissionGroup = "root"
-	url = "http://www.finch4alice.org/"
+	url = "http://www.finch4alice.com/"
+
+//	user = "root"
+//	permissionGroup = "root"
 	
+/*
 	installUtils file('scripts/rpm/utils.sh')
 	preInstall file('scripts/rpm/preInstall.sh')
 	postInstall file('scripts/rpm/postInstall.sh')
@@ -110,6 +115,7 @@ ospackage {
 	requires('qux')
 
 	into '/opt/foo'
+*/
 
 	from(jar.outputs.files) {
 		into 'lib'
@@ -120,6 +126,7 @@ ospackage {
 	from('lib') {
 		into 'lib'
 	}
+/*
 	from('scripts') {
 		into 'bin'
 		exclude 'database'
@@ -142,19 +149,33 @@ ospackage {
 		addParentDirs = false
 		into '/usr/share/tomcat/endorsed'
 	}
-
+*/
 }
 
 buildRpm {
-//	requires('bar', '2.2', GREATER | EQUAL)
-//	requires('baz', '1.0.1', LESS)
-//	link('/etc/init.d/foo', '/opt/foo/bin/foo.init')
+	arch = "NOARCH"
+
+	// Do a little magic here, since RPM has different semantics for snapshot versions
+	// https://fedoraproject.org/wiki/Packaging:NamingGuidelines#Version_Tag
+	if (project.version ==~ /^.*-SNAPSHOT$/) {
+		// We need to strip the -SNAPSHOT suffix from the version
+		version = project.version.replaceFirst(/-SNAPSHOT$/, '')
+
+		// And set the 'release' to indicate a snapshot release
+		release = 'SNAPSHOT'+ new Date().format('yyyyMMddHHmmss')
+	}
 }
 
 buildDeb {
-//	requires('bat', '1.0.1')
-//	link('/etc/init.d/foo', '/opt/foo/bin/foo.upstart')
-//	configurationFiles file('/etc/myapp/myapp.conf')
+	arch = "all"
+
+	// Do a little magic here, since DEB has specific semantics for versions with hyphens in them
+	// https://www.debian.org/doc/debian-policy/ch-controlfields.html#s-f-Version
+	// http://serverfault.com/questions/604541/debian-packages-version-convention
+	if (project.version ==~ /^.*-SNAPSHOT$/) {
+		// Add in a 'debian_revision' of 0 here to accommodate the Deb versioning requirements
+		version += '-0'
+	}
 }
 
 
