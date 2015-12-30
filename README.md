@@ -9,11 +9,11 @@ Finch 4 Alice provides a simple extension to Alice 3 that adds methods for contr
 
 You can build the Jar only for manual installation, or create several types of installers.
 
-### Prereqiusites
+### Prerequisites
 
 #### Alice 3
 
-You must have an installation of Alice 3 on the build machine, preferrable installed in the default location.  This location varies by platform, as shown in the following table:
+You must have an installation of Alice 3 on the build machine, preferrably installed in the default location.  This location varies by platform, as shown in the following table:
 
 | Platform | Default Installation Location |
 | -------- | ----------------------------- |
@@ -29,13 +29,13 @@ You must have the Java Development Kit (JDK) version 1.7 or newer installed and 
 
 If Alice 3 is installed in the default location, executing the following command from within the project folder will build the Jar file.
 
-```bash session
+```
 ./gradlew jar
 ```
 
 If Alice is installed in a non-standard path, you can specify the correct path by providing it via the `aliceLibDir` command-line property value as follows:
 
-```bash session
+```
 ./gradlew jar -PaliceLibDir=/path/to/alice3/lib
 ```
 
@@ -45,7 +45,7 @@ If Alice is installed in a non-standard path, you can specify the correct path b
 
 This type of installer is the easiest to use for most end-users.  It provides an intuitive window-based installer that walks users through the installation process, and will run on all of the supported platforms.
 
-```bash session
+```
 ./gradlew izpack
 ```
 
@@ -54,7 +54,7 @@ This type of installer is the easiest to use for most end-users.  It provides an
 
 Users of Redhat Enterprise Linux or Fedora Linux may prefer to use RPM to install.  To generate a suitable RPM package:
 
-```bash session
+```
 ./gradlew buildRpm
 ```
 
@@ -62,13 +62,13 @@ The generated RPM can be found under `build/distributions/`.
 
 You can install the generated package using `rpm`, as shown below:
 
-```bash session
+```
 rpm -ivh build/distributions/finch4alice_0.1_noarch.rpm
 ```
 
 OR, if you have already installed a previous version, use the upgrade command.  This is also safe to run if you haven't yet installed the package.
 
-```bash session
+```
 rpm -Uvh build/distributions/finch4alice_0.1_noarch.rpm
 ```
 
@@ -80,7 +80,7 @@ To install using `yum` and for distribution to multiple machines, it is recommen
 
 If you run a Debian-based system and prefer installing via `apt`, then this may be the installation type for you.  You can build a Debian package by running the following command:
 
-```bash session
+```
 ./gradlew buildDeb
 ```
 
@@ -88,7 +88,7 @@ The generated DEB can be found under `build/distributions/`.
 
 You can install the generated package using `dpkg`, as shown below:
 
-```bash session
+```
 dpkg -i build/distributions/finch4alice_0.1_all.deb
 ```
 
@@ -103,15 +103,15 @@ If for some reason the generated installers don't work for your particular situa
 To manually install Finch 4 Alice:
 
 1. First build the Jar as described above under [Building the Jar file only](#building-the-jar-file-only).
-2. Copy the generated Jar file from the build directory into the Alice library directory
-```bash session
-mkdir /path/to/alice/lib/finch4alice
-cp ./build/finch4alice-0.1.jar /path/to/alice/lib/finch4alice
+2. Copy the generated Jar file from the build directory into the Alice `ext` directory
+```
+mkdir /path/to/alice/ext/finch4alice
+cp ./build/finch4alice-0.1.jar /path/to/alice/ext/finch4alice
 ```
 3. Create an Install4J configuration to instruct Alice to load the new Jar.
-  * For Windows, copy the file 'src/resources/Alice 3.vmoptions.windows' into the Alice main folder and rename it to 'Alice 3.vmoptions'.
-  * For Linux and Mac OS X
-```bash session
+  * For Windows, copy the file `src/resources/Alice 3.vmoptions.windows` into the Alice main folder and rename it to `Alice 3.vmoptions`.
+  * For Linux and Mac OS X:
+```
 cp "src/resources/Alice 3.vmoptions.linux" "/path/to/alice/Alice 3.vmoptions"
 ```
 
@@ -130,7 +130,7 @@ TODO: image here
 
 TODO: image here
 
-4. Click `Show...` to the right of java.class.path
+4. Click `Show...` to the right of `java.class.path`
 
 TODO: image here
 
