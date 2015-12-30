@@ -135,7 +135,7 @@ cp "src/resources/Alice 3.vmoptions.linux" "/path/to/alice/Alice 3.vmoptions"
 To ensure that everything is installed and configured properly:
 
 1. Launch Alice
-2. When prompted, create a new empty project (eg. select 'GRASS' from under the 'Blank Slates' tab)
+2. When prompted to load a project, simple close the dialog by clicking 'Cancel'.
 
 TODO: image here
 

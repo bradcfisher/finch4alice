@@ -43,9 +43,9 @@ void detectAliceDir() {
 		if (os.isWindows()) {
 			rv = "C:\\Program Files\\Alice 3"
 		} else if (os.isMacOsX()) {
-			rv = file("~/Alice3").absolutePath
+			rv = System.getProperty("user.home") +"/Alice3"
 		} else if (os.isUnix()) {
-			rv = file("~/Alice3").absolutePath
+			rv = System.getProperty("user.home") +"/Alice3"
 		}
 	}
 
@@ -238,25 +238,29 @@ githubPages {
 	}
 }
 
-task install(type: Copy, dependsOn: jar) {
+task install(dependsOn: jar) {
 	def optionsFile =
 		"Alice 3.vmoptions."+
 			(org.gradle.internal.os.OperatingSystem.current().isWindows() ? "windows" : "linux")
 
-	eachFile { println "Copying "+ it }
+	// We use a the project.copy function here instead of inheriting from the Copy task
+	// because we don't care about the up-to-date checks which the Copy task will perform.
+	// Since the target folders already have files in them, those checks are expensive
+	// and waste a lot of time during the install.
+	copy {
+		eachFile { println "Copying "+ it }
 
-	into aliceDir
+		into aliceDir
 
-	from("src/main/resources") {
-		include optionsFile
-		rename ".*", "Alice 3.vmoptions"
-	}
+		from("src/main/resources") {
+			include optionsFile
+			rename ".*", "Alice 3.vmoptions"
+		}
 
-	from("${buildDir.name}/libs") {
-		into "ext/finch4alice"
-		include "finch4alice-*.jar"
-		rename ".*", "finch4alice.jar"
+		from("${buildDir.name}/libs") {
+			into "ext/finch4alice"
+			include "finch4alice-*.jar"
+			rename ".*", "finch4alice.jar"
+		}
 	}
 }
-
-
