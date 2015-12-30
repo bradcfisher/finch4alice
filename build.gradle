@@ -3,13 +3,14 @@ plugins {
 	id "java"
 	id "com.bmuschko.izpack" version "2.1"	// For building cross-platform installers
 	id "nebula.ospackage" version "3.1.0"	// For building deb and rpm packages
+	id "org.ajoberstar.github-pages" version "1.3.2"
 }
 
 version = "0.1-SNAPSHOT"
 description = "Enhances Alice 3.2 STransport subclasses to include methods for interacting with the Finch robot"
 sourceCompatibility = 1.6
 
-ext.aliceLibDir = detectAliceLibDir()	// To specify a specific path, use -PaliceLibDir=/path/to/alice3/lib
+detectAliceDir()
 
 repositories {
 	// Use 'jcenter' for resolving your dependencies.
@@ -25,28 +26,69 @@ tasks.withType(JavaCompile) {
 }
 
 /**
- * Attempts to determine the lib path of an Alice 3 installation.
+ * Attempts to determine the root path of an Alice 3 installation.
  *
- * The path returned may be specified on the command line by passing -PaliceLibDir=/path/to/alice3/lib
+ * The path returned may be specified on the command line by passing -PaliceDir=/path/to/alice3
  * Otherwise, the following OS-specific defaults will be used:
- *   Windows: C:\Program Files\Alice 3\lib
- *   Linux: ~/Alice3/lib
- *   Mac OSX: ~/Alice3/lib
+ *   Windows: C:\Program Files\Alice 3
+ *   Linux: ~/Alice3
+ *   Mac OSX: ~/Alice3
  */
-String detectAliceLibDir() {
-	if (project.hasProperty('aliceLibDir')) {
-		return project.aliceLibDir;
+void detectAliceDir() {
+	def rv = null
+	if (project.hasProperty('aliceDir')) {
+		rv = project.aliceDir;
 	} else {
 		def os = org.gradle.internal.os.OperatingSystem.current()
 		if (os.isWindows()) {
-			return "C:\\Program Files\\Alice 3\\lib"
-		} else if (os.isMacOSX()) {
-			return "~/Alice3/lib"
+			rv = "C:\\Program Files\\Alice 3"
+		} else if (os.isMacOsX()) {
+			rv = file("~/Alice3").absolutePath
 		} else if (os.isUnix()) {
-			return "~/Alice3/lib"
+			rv = file("~/Alice3").absolutePath
 		}
 	}
-} // detectAliceLibDir
+
+	verifyAliceDir(rv)
+
+	println "Alice installation detected at $aliceDir"
+} // detectAliceDir
+
+/**
+ * Checks the specified path and ensures that it appears to be an Alice installation.
+ * This method verifies the path exists, and that it contains two subfolders: 'lib' and 'ext'.
+ * As a side-effect, this method also sets an aliceLibDir property on the project.
+ * @param	path	The path to verify.
+ */
+void verifyAliceDir(String path) {
+	if (!file("$path").exists())
+		throw new java.io.FileNotFoundException("The specified Alice dir doesn't exist: $path")
+
+	def libDir = file("$path/lib").getAbsolutePath()
+
+	if (!file(libDir).exists())
+		throw new java.io.FileNotFoundException("The Alice 'lib' dir doesn't exist: $libDir")
+
+	if (fileTree(dir: libDir, include: '*.jar').size() == 0)
+		throw new java.io.FileNotFoundException("The Alice 'lib' dir doesn't contain any Jar files: $libDir")
+
+	def extDir = file("$path/ext").getAbsolutePath()
+
+	if (!file(extDir).exists())
+		throw new java.io.FileNotFoundException("The Alice 'ext' dir doesn't exist: $extDir")
+
+	if (fileTree(dir: extDir, include: '*/').size() == 0)
+		throw new java.io.FileNotFoundException("The Alice 'ext' dir doesn't contain any subfolders: $extDir")
+
+/*	// Should only need this if we want to launch Alice, so omitting for now
+	def exeName = (org.gradle.internal.os.OperatingSystem.current().isWindows() ? "Alice 3.exe" : "Alice3")
+	if (!file("$path/$exeName").exists())
+		throw new java.io.FileNotFoundException("Unable to find Alice executable: $path/$exeName")
+*/
+
+	project.ext.aliceDir = path
+	project.ext.aliceLibDir = libDir
+} // verifyAliceDir
 
 /**
  * Returns the paths of all of the Jars in the Alice lib dir
@@ -175,6 +217,45 @@ buildDeb {
 	if (project.version ==~ /^.*-SNAPSHOT$/) {
 		// Add in a 'debian_revision' of 0 here to accommodate the Deb versioning requirements
 		version += '-0'
+	}
+}
+
+// Configure the 'prepareGhPages' and 'publishGhPages' tasks for updating the javadoc on gh-pages
+// The project property 'gitSshKey' can be specified to provide a non-standard SSH key for authentication
+githubPages {
+	def docVersion = project.version.replaceFirst(/-SNAPSHOT$/, '')
+
+	if (project.hasProperty('gitSshKey'))
+		System.setProperty("org.ajoberstar.grgit.auth.ssh.private", gitSshKey)
+
+	repoUri = 'git@github.com:bradcfisher/finch4alice.git'
+	targetBranch = 'gh-pages'
+	deleteExistingFiles = false
+	commitMessage = "Updated javadoc for version "+ docVersion +" from gradle"
+	pages {
+		into "api/$docVersion"
+		from javadoc
+	}
+}
+
+task install(type: Copy, dependsOn: jar) {
+	def optionsFile =
+		"Alice 3.vmoptions."+
+			(org.gradle.internal.os.OperatingSystem.current().isWindows() ? "windows" : "linux")
+
+	eachFile { println "Copying "+ it }
+
+	into aliceDir
+
+	from("src/main/resources") {
+		include optionsFile
+		rename ".*", "Alice 3.vmoptions"
+	}
+
+	from("${buildDir.name}/libs") {
+		into "ext/finch4alice"
+		include "finch4alice-*.jar"
+		rename ".*", "finch4alice.jar"
 	}
 }
 

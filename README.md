@@ -33,20 +33,30 @@ If Alice 3 is installed in the default location, executing the following command
 ./gradlew jar
 ```
 
-If Alice is installed in a non-standard path, you can specify the correct path by providing it via the `aliceLibDir` command-line property value as follows:
+If Alice is installed in a non-standard path, you can specify the correct path by providing it via the `aliceDir` command-line property value as follows:
 
 ```
-./gradlew jar -PaliceLibDir=/path/to/alice3/lib
+./gradlew jar -PaliceDir=/path/to/alice3
 ```
 
-### Building the installers
+### Installation
 
-#### Multi-platform / Windows
+#### Direct install
+
+If you wish to install Finch 4 Alice on the build machine, it can be installed directly by Gradle.  To accomplish this, execute the following command:
+
+```
+./gradlew install
+```
+
+This will automatically perform the steps described under [Manual installation](manual-installation).
+
+#### Multi-platform / Windows Installer
 
 This type of installer is the easiest to use for most end-users.  It provides an intuitive window-based installer that walks users through the installation process, and will run on all of the supported platforms.
 
 ```
-./gradlew izpack
+./gradlew izPackCreateInstaller
 ```
 
 
@@ -96,17 +106,20 @@ To install using `apt` and for distribution to multiple machines, it is recommen
 
 > As stated above for the RPM package, the generated Debian paclage will only install into the same folder structure as Alice is installed under on the build machine.  Since Alice is generally installed to each user's home directory, this type of packaging will generally not be the best option.  However, if you wish to install Alice in a system-wide configuration on multiple machines, this may be the route to go.
 
-## Manual installation
+#### Manual installation
 
-If for some reason the generated installers don't work for your particular situation, or you simply enjoy getting into the nitty gritty aspects of software hacking, then this is the section for you.
+If for some reason the above options don't work for your particular situation, or you simply enjoy getting into the nitty gritty aspects of software hacking, then this is the section for you.
 
 To manually install Finch 4 Alice:
 
 1. First build the Jar as described above under [Building the Jar file only](#building-the-jar-file-only).
+```
+./gradlew jar
+```
 2. Copy the generated Jar file from the build directory into the Alice `ext` directory
 ```
 mkdir /path/to/alice/ext/finch4alice
-cp ./build/finch4alice-0.1.jar /path/to/alice/ext/finch4alice
+cp ./build/finch4alice-0.1.jar /path/to/alice/ext/finch4alice/finch4alice.jar
 ```
 3. Create an Install4J configuration to instruct Alice to load the new Jar.
   * For Windows, copy the file `src/resources/Alice 3.vmoptions.windows` into the Alice main folder and rename it to `Alice 3.vmoptions`.
@@ -194,7 +207,15 @@ Finch 4 Alice works by extending the STransport parent class within Alice.  Seve
 
 TODO: Add some details on debugging and logging here
 
-## Disclaimer
+## Contributing
+
+Contributions are very welcome and are accepted through pull requests.
+
+## Bugs and Features Requests
+
+Please submit all bug reports and feature requests to the project [issue tracker](https://github.com/bradcfisher/finch4alice/issues).
+
+## Disclaimers & License
 
 The Finch 4 Alice project is not affiliated with either the Finch or Alice 3 projects or their respective intellectual property holders.
 
@@ -202,4 +223,19 @@ The Finch robot is produced by [BirdBrain Technologies LLC](http://www.birdbrain
 
 Alice 3 is developed by [Carnegie Mellon University](http://www.cs.cmu.edu/).
 
-This software interacts with the BirdBrainRobot server which is covered by a [Creative Commons Attribution-ShareAlike 3.0 Unported License](http://creativecommons.org/licenses/by-sa/3.0/).
+This software interacts with the [BirdBrain Robot Server](https://github.com/BirdBrainTechnologies/BirdBrainRobotServer) which is covered by a [Creative Commons Attribution-ShareAlike 3.0 Unported License](http://creativecommons.org/licenses/by-sa/3.0/).
+
+---
+
+Finch 4 Alice is released under the BSD 2-Clause License
+
+Copyright (c) 2015, Brad Fisher  
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
