@@ -1,14 +1,13 @@
 
 plugins {
 	id "java"
-	id "com.bmuschko.izpack" version "2.1"	// For building cross-platform installers
-	id "nebula.ospackage" version "3.1.0"	// For building deb and rpm packages
+	id "com.bmuschko.izpack" version "2.1"	// For building cross-platform installer
 	id "org.ajoberstar.github-pages" version "1.3.2"
 }
 
 version = "0.1-SNAPSHOT"
 description = "Enhances Alice 3.2 STransport subclasses to include methods for interacting with the Finch robot"
-sourceCompatibility = 1.6
+//sourceCompatibility = 1.7
 
 detectAliceDir()
 
@@ -57,7 +56,8 @@ void detectAliceDir() {
 /**
  * Checks the specified path and ensures that it appears to be an Alice installation.
  * This method verifies the path exists, and that it contains two subfolders: 'lib' and 'ext'.
- * As a side-effect, this method also sets an aliceLibDir property on the project.
+ * As a side-effect, this method also sets an aliceDir (if not already set) and an aliceLibDir
+ * property on the project.
  * @param	path	The path to verify.
  */
 void verifyAliceDir(String path) {
@@ -98,7 +98,8 @@ FileCollection aliceLibJars() {
 } // aliceLibJars
 
 configurations {
-	provided	// This configuration is used to append the Alice library Jars to the compile classpath without affecting the runtime classpath
+	provided	// This configuration is used to append the Alice library Jars to the
+				// compile classpath without affecting the runtime classpath
 }
 
 // In this section you declare the dependencies for your production and test code
@@ -114,6 +115,10 @@ dependencies {
 	// testCompile dependency to testCompile 'org.testng:testng:6.8.1' and add
 	// 'test.useTestNG()' to your build script.
 	testCompile 'junit:junit:4.12'
+
+	// Building izpack installer requires this
+	// It provides the underlying Ant plugin used to build the installer, among other things
+	izpack 'org.codehaus.izpack:izpack-standalone-compiler:4.3.4'
 }
 
 // Append the Alice Jars to the compile class path
@@ -121,103 +126,27 @@ sourceSets.main.compileClasspath += configurations.provided
 
 javadoc.classpath = sourceSets.main.compileClasspath
 
+// Task for regenerating/updating the Gradle wrapper script
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.10'
+}
+
+// Ensure izPackCreateInstaller runs _after_ the jar task
+tasks.izPackCreateInstaller.dependsOn(jar)
+
 // Configuration for building the installer package using izpack
 izpack {
+	baseDir = file("$buildDir")	// The directory that file references in the install.xml are relative to
 	compression = 'deflate'
 	compressionLevel = 9
 	appProperties = [
-		'app.group': 'finch4alice',
-		'app.name': 'finch4alice',
-		'app.title': 'Finch4Alice',
+		'app.name': project.name,
+		'app.title': 'Finch 4 Alice',
 		'app.version': version,
-		'app.subpath': "Finch4Alice-$version"
+		'app.url': 'http://www.finch4alice.com/'
+//		'app.group': project.name,
+//		'app.subpath': "Finch4Alice-$version",
 	]
-}
-
-
-
-ospackage {
-	packageName = project.name
-	summary = project.description
-
-	os = LINUX
-
-	url = "http://www.finch4alice.com/"
-
-//	user = "root"
-//	permissionGroup = "root"
-	
-/*
-	installUtils file('scripts/rpm/utils.sh')
-	preInstall file('scripts/rpm/preInstall.sh')
-	postInstall file('scripts/rpm/postInstall.sh')
-	preUninstall 'touch /tmp/myfile'
-	postUninstall file('scripts/rpm/postUninstall.sh')
-
-	requires('qux')
-
-	into '/opt/foo'
-*/
-
-	from(jar.outputs.files) {
-		into 'lib'
-	}
-	from(configurations.runtime) {
-		into 'lib'
-	}
-	from('lib') {
-		into 'lib'
-	}
-/*
-	from('scripts') {
-		into 'bin'
-		exclude 'database'
-		fileMode = 0550
-	}
-	from('src/main/resources') {
-		fileType CONFIG | NOREPLACE
-		into 'conf'
-	}
-	from('home') {
-		// Creating directory entries (or not) in the RPM is normally left up to redline-rpm library.
-		// Use this to explicitly create an entry -- for setting directory fileMode on system directories.
-		createDirectoryEntry = true
-		fileMode = 0500
-		into 'home'
-	}
-	from('endorsed') {
-		// Will tell redline-rpm not to auto create directories, which
-		// is sometimes necessary to avoid rpm directory conflicts
-		addParentDirs = false
-		into '/usr/share/tomcat/endorsed'
-	}
-*/
-}
-
-buildRpm {
-	arch = "NOARCH"
-
-	// Do a little magic here, since RPM has different semantics for snapshot versions
-	// https://fedoraproject.org/wiki/Packaging:NamingGuidelines#Version_Tag
-	if (project.version ==~ /^.*-SNAPSHOT$/) {
-		// We need to strip the -SNAPSHOT suffix from the version
-		version = project.version.replaceFirst(/-SNAPSHOT$/, '')
-
-		// And set the 'release' to indicate a snapshot release
-		release = 'SNAPSHOT'+ new Date().format('yyyyMMddHHmmss')
-	}
-}
-
-buildDeb {
-	arch = "all"
-
-	// Do a little magic here, since DEB has specific semantics for versions with hyphens in them
-	// https://www.debian.org/doc/debian-policy/ch-controlfields.html#s-f-Version
-	// http://serverfault.com/questions/604541/debian-packages-version-convention
-	if (project.version ==~ /^.*-SNAPSHOT$/) {
-		// Add in a 'debian_revision' of 0 here to accommodate the Deb versioning requirements
-		version += '-0'
-	}
 }
 
 // Configure the 'prepareGhPages' and 'publishGhPages' tasks for updating the javadoc on gh-pages
@@ -239,28 +168,28 @@ githubPages {
 }
 
 task install(dependsOn: jar) {
-	def optionsFile =
-		"Alice 3.vmoptions."+
-			(org.gradle.internal.os.OperatingSystem.current().isWindows() ? "windows" : "linux")
+	// We use project.copy here instead of inheriting from the Copy task because we don't care
+	// about the up-to-date checks which the Copy task will perform.  Since the target folders
+	// will already have files in them, those checks are expensive and waste a lot of time during
+	// the install.
+	doLast {
+		def optionsFile =
+			"Alice 3.vmoptions."+
+				(org.gradle.internal.os.OperatingSystem.current().isWindows() ? "windows" : "linux")
 
-	// We use a the project.copy function here instead of inheriting from the Copy task
-	// because we don't care about the up-to-date checks which the Copy task will perform.
-	// Since the target folders already have files in them, those checks are expensive
-	// and waste a lot of time during the install.
-	copy {
-		eachFile { println "Copying "+ it }
+		copy {
+			into aliceDir
 
-		into aliceDir
+			from("src/main/resources") {
+				include optionsFile
+				rename ".*", "Alice 3.vmoptions"
+			}
 
-		from("src/main/resources") {
-			include optionsFile
-			rename ".*", "Alice 3.vmoptions"
-		}
-
-		from("${buildDir.name}/libs") {
-			into "ext/finch4alice"
-			include "finch4alice-*.jar"
-			rename ".*", "finch4alice.jar"
+			from("${buildDir.name}/libs") {
+				into "ext/finch4alice"
+				include "finch4alice-*.jar"
+				rename ".*", "finch4alice.jar"
+			}
 		}
 	}
 }

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<installation version="1.0">
+	<variables>
+		<variable name="DesktopShortcutCheckboxEnabled" value="false"/>
+	</variables>
+
+	<info>
+		<appname>@{app.title}</appname>
+		<appversion>@{app.version}</appversion>
+		<url>@{app.url}</url>
+		<authors>
+			<author name="Brad Fisher" email="fisher.brad@uwlax.edu"/>
+		</authors>
+	</info>
+
+	<guiprefs width="640" height="480" resizable="yes"/>
+
+	<locale>
+		<langpack iso3="eng"/>
+	</locale>
+
+	<!--
+		The resources section.
+		The ids must be these ones if you want to use the LicencePanel and/or the InfoPanel.
+	-->
+	<resources>
+<!--		<res src="shortcutSpec.xml" id="shortcutSpec.xml"/> -->
+		<res id="LicencePanel.licence" src="../LICENSE"/>
+		<res id="InfoPanel.info" src="../README.md"/>
+	</resources>
+
+	<!--
+		The panels section.
+		We indicate here which panels we want to use. The order will be respected.
+	-->
+	<panels>
+		<panel classname="HelloPanel"/>
+		<panel classname="LicencePanel"/>
+		<panel classname="TargetPanel"/>
+		<panel classname="PacksPanel"/>
+		<panel classname="InstallPanel"/>
+		<panel classname="ShortcutPanel"/>
+		<panel classname="FinishPanel"/>
+	</panels>
+
+	<conditions>
+		<condition type="or" id="linuxOrMac">
+			<condition type="ref" refid="izpack.linuxinstall"/>
+			<condition type="ref" refid="izpack.macinstall" />
+		</condition>
+	</conditions>
+
+	<packs>
+		<pack name="Core Files" required="yes">
+			<description>The core files required by @{app.title}</description>
+			<file src="../README.md" targetdir="$INSTALL_PATH/ext/@{app.name}"/>
+			<file src="../LICENSE" targetdir="$INSTALL_PATH/ext/@{app.name}"/>
+			<singlefile src="libs/@{app.name}-@{app.version}.jar" target="$INSTALL_PATH/ext/@{app.name}/@{app.name}.jar"/>
+			
+			<singlefile condition="izpack.windowsinstall" src="../src/main/resources/Alice 3.vmoptions.windows" target="$INSTALL_PATH/Alice 3.vmoptions"/>
+			<singlefile condition="linuxOrMac" src="../src/main/resources/Alice 3.vmoptions.linux" target="$INSTALL_PATH/Alice 3.vmoptions"/>
+		</pack>
+	</packs>
+
+	<native type="izpack" name="ShellLink.dll"/>
+	<native type="3rdparty" name="COIOSHelper.dll" stage="both">
+		<os family="windows"/>
+	</native>
+</installation>
