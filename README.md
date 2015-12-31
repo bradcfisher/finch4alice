@@ -7,19 +7,23 @@ Finch 4 Alice provides a simple extension to Alice 3 that adds methods for contr
 
 ## Building
 
-You can build the Jar only for manual installation, or create several types of installers.
+You can build the Jar only for manual installation, build and install directly, or create several types of installers.
 
 ### Prerequisites
 
 #### Alice 3
 
-You must have an installation of Alice 3 on the build machine, preferrably installed in the default location.  This location varies by platform, as shown in the following table:
+You must have an installation of [Alice 3](http://www.alice.org/) on the build machine, preferrably installed in the default location.  This location varies by platform, as shown in the following table:
 
 | Platform | Default Installation Location |
 | -------- | ----------------------------- |
 | Windows  | C:\Program Files\Alice 3      |
 | Linux    | ~/Alice3/lib                  |
 | Max OS X | ~/Alice3/lib                  |
+
+Finch 4 Alice has been tested against Alice version 3.2.5.0.0.  Previous versions used a different type of installer and are not compatible.
+
+To download a copy of Alice for your environment, visit the [Alice website](http://www.alice.org/).
 
 #### JDK
 
@@ -51,60 +55,19 @@ If you wish to install Finch 4 Alice on the build machine, it can be installed d
 
 This will automatically perform the steps described under [Manual installation](manual-installation).
 
-#### Multi-platform / Windows Installer
+Because Alice is installed system-wide by default on Windows, you will need to ensure you started the command window as Administrator or the installation will likely fail due to lack of permissions.
 
-This type of installer is the easiest to use for most end-users.  It provides an intuitive window-based installer that walks users through the installation process, and will run on all of the supported platforms.
+Under Linux, you should be able to run the install as a normal user, as long as Alice is installed in the default location under that user's home directory.  If it is installed in a system-wide location like `/bin`, `/usr/bin`, or `/usr/local/bin` you will need to run the command as root with `sudo`.
+
+#### Multi-platform installer
+
+This installer is the easiest to use for most end-users.  It provides an intuitive window-based installer that walks users through the installation process, doesn't require any special build tools, and will run on all of the supported platforms with a properly configured JRE.
 
 ```
 ./gradlew izPackCreateInstaller
 ```
 
-
-#### RPM package
-
-Users of Redhat Enterprise Linux or Fedora Linux may prefer to use RPM to install.  To generate a suitable RPM package:
-
-```
-./gradlew buildRpm
-```
-
-The generated RPM can be found under `build/distributions/`.
-
-You can install the generated package using `rpm`, as shown below:
-
-```
-rpm -ivh build/distributions/finch4alice_0.1_noarch.rpm
-```
-
-OR, if you have already installed a previous version, use the upgrade command.  This is also safe to run if you haven't yet installed the package.
-
-```
-rpm -Uvh build/distributions/finch4alice_0.1_noarch.rpm
-```
-
-To install using `yum` and for distribution to multiple machines, it is recommended that you set up a local yum repository server.
-
-> Note that the generated package will only install into the same folder structure as Alice is installed under on the build machine.  Since Alice is generally installed to each user's home directory, this type of packaging will generally not be the best option.  However, if you wish to install Alice in a system-wide configuration on multiple machines, this may be the route to go.
-
-#### Debian (DEB) package
-
-If you run a Debian-based system and prefer installing via `apt`, then this may be the installation type for you.  You can build a Debian package by running the following command:
-
-```
-./gradlew buildDeb
-```
-
-The generated DEB can be found under `build/distributions/`.
-
-You can install the generated package using `dpkg`, as shown below:
-
-```
-dpkg -i build/distributions/finch4alice_0.1_all.deb
-```
-
-To install using `apt` and for distribution to multiple machines, it is recommended that you set up a local apt cache repository.  One such option is to use [reprepro](https://mirrorer.alioth.debian.org/).
-
-> As stated above for the RPM package, the generated Debian paclage will only install into the same folder structure as Alice is installed under on the build machine.  Since Alice is generally installed to each user's home directory, this type of packaging will generally not be the best option.  However, if you wish to install Alice in a system-wide configuration on multiple machines, this may be the route to go.
+Once generated, you can find the installer under `build/distributions/finch4alice-<version>-installer.jar`.
 
 #### Manual installation
 
@@ -116,17 +79,27 @@ To manually install Finch 4 Alice:
 ```
 ./gradlew jar
 ```
-2. Copy the generated Jar file from the build directory into the Alice `ext` directory
+
+2. Create a new subdirectory under the Alice `ext` directory named `ext/finch4alice`.
 ```
 mkdir /path/to/alice/ext/finch4alice
+```
+
+3. Copy the generated Jar file `build/distributions/finch4alice-<version>.jar` into the Alice `ext/finch4alice` directory, and rename it to `finch4alice.jar`.
+```
 cp ./build/finch4alice-0.1.jar /path/to/alice/ext/finch4alice/finch4alice.jar
 ```
-3. Create an Install4J configuration to instruct Alice to load the new Jar.
+
+4. Create an Install4J vmoptions configuration file to instruct Alice to load the new Jar when it starts up.
   * For Windows, copy the file `src/resources/Alice 3.vmoptions.windows` into the Alice main folder and rename it to `Alice 3.vmoptions`.
-  * For Linux and Mac OS X:
+  * For Linux and Mac OS X, copy `src/resources/Alice 3.vmoptions.linux`:
 ```
 cp "src/resources/Alice 3.vmoptions.linux" "/path/to/alice/Alice 3.vmoptions"
 ```
+
+Because Alice is installed system-wide by default on Windows, you will likely need to confirm a few UAC dialogs to copy and rename the files.
+
+Under Linux, you should be able to run the install as a normal user, as long as Alice is installed in the default location under that user's home directory.  If it is installed in a system-wide location like `/bin`, `/usr/bin`, or `/usr/local/bin` you will need to run the command as root with `sudo`.
 
 ## Using Finch 4 Alice
 
@@ -137,27 +110,63 @@ To ensure that everything is installed and configured properly:
 1. Launch Alice
 2. When prompted to load a project, simple close the dialog by clicking 'Cancel'.
 
-TODO: image here
+![Select Project Dialog](images/readme/select_project_dialog.png "Click the 'Cancel' button to close this dialog")
 
 3. Select the `Help -> Show System Properties` menu
 
-TODO: image here
+![Show System Properties Menu](images/readme/show_system_properties_menu.png "The 'Show System Properties' menu")
 
 4. Click `Show...` to the right of `java.class.path`
 
-TODO: image here
+![Show System Properties Dialog](images/readme/show_system_properties_dialog.png "The 'Show System Properties' dialog")
 
 5. Verify that the finch4alice jar is listed at the beginning of the class path.
 
-TODO: image here
+![System Property: java.class.path Dialog](images/readme/java_class_path_dialog.png "The 'System Property: java.class.path' dialog")
 
 ### Connecting to a Finch
 
-TODO: Provide a simple example of how to interact with a connected Finch robot
+Now that you have Finch 4 Alice installed, what can you do with it?  In this section, we'll go through a simple example and "kick the tires", so to speak.
+
+#### Prerequisites
+
+1. You need an installation of Alice 3, with Finch 4 Alice installed.
+
+2. You need a Finch robot, properly connected to your computer.  If you don't happen to have a Finch, they can be purchased from the [Finch Robot website](http://www.finchrobot.com/).
+
+2. You will need to install the BirdBrain Robot Server.  You can find installers for various operating systems in the [BirdBrain Robot Server GitHub repository](https://github.com/BirdBrainTechnologies/BirdBrainRobotServer/tree/master/Packages).  Perhaps surprisingly, Finch 4 Alice doesn't actually communicate directly with a Finch robot.  It relies on the BirdBrain Robot Server to do that.  This simplifies the implementation and reduces the number of dependencies that would need to be patched into Alice.
+
+#### Example project
+
+- Start the BirdBrain Robot Server and connect your Finch robot.  The BirdBrain server window should look as follows when it detects a connected Finch:
+
+![The BirdBrain Robot Server with a connected Finch](images/readme/birdbrain_connected_finch.png "The BirdBrain Robot Server with a connected Finch")
+
+- Launch Alice and when prompted to select a project, create a new project based on the 'GRASS' theme.
+
+![Select Project Dialog](images/readme/select_project_dialog.png "Select 'GRASS', then click the 'OK' button to create a new project")
+
+- Click `Setup Scene`
+- Click `Transport classes`
+- Click `Watercraft classes`
+- Click `new FishingBoat()`
+- Click `Edit Code`
+- Drag the `finchSetLED` procedure from the pane on the left into the code window for 'myFirstMethod'
+- Select `Custom Whole Number...`, then `0` for the second parameter and `0` for the third parameter.
+- Enter `255` when prompted for the custom value for the first parameter.
+- Drag the `delay` procedure into 'myFirstMethod'
+- Select `2.0` for the number of seconds to delay
+- Drag the `finchSetLED` procedure into 'myFirstMethod'
+- Select `0` for all three parameters.
+- Drag the `say` procedure into 'myFirstMethod'
+- Select `Custom TextString...` and enter `All done` when prompted.
+- You are now ready to try running your test project.  Click the `Run` button and you should see the LED in the nose of your Finch turn red for two seconds, then turn off.
 
 ### Additions to the STransport API
 
 Finch 4 Alice works by extending the STransport parent class within Alice.  Several new procedures and functions are added that expose the full range of functionality provided by the Finch robot.
+
+The new procedures and functions are listed below.  If you want the full details, be sure to check out [the Javadoc API](https://bradcfisher.github.io/finch4alice/api/0.1/).
 
 #### Finch procedures
 
@@ -170,8 +179,6 @@ Finch 4 Alice works by extending the STransport parent class within Alice.  Seve
 `finchSetWheelVelocities(int leftVelocity, int rightVelocity)`
 
 `finchStopWheels()`
-
-
 
 #### Finch functions
 
@@ -205,15 +212,27 @@ Finch 4 Alice works by extending the STransport parent class within Alice.  Seve
 
 ### Debugging and Logging
 
+
 TODO: Add some details on debugging and logging here
+
+
+## How it works
+
+Alice 3 doesn't directly provide an extension mechanism for adding additional functionality such as access to external libraries or jars from within the Alice editor itself.
+
+To work around this, Finch 4 Alice causes the Java runtime to load a custom Jar file into the class path before the other Alice classes are loaded.  Due to the way that the Java class loader works, classes found earlier in the class path will override classes of the same name that are found later (that is, a first-come-first-served policy).
+
+The Jar generated by Finch 4 Alice contains a replacement version of the `org.lgna.story.STransport` class within Alice which all "transport" objects (for example Automobile or Boat) are subclasses of.  Not counting inheritied methods or properties, the implementation of that class within Alice itself is pretty minimal, consisting of a constructor and a single property.  That simplicity made it an ideal target for adding additional methods to.
+
+One may wonder "Why not add a new type of object with Alice to represent a Finch?"  In one word: Complexity.  Due to how the Alice code is currently structured, adding an additional object type that could be selected from within the UI would have had far-reaching implications in terms of the number of classes that would need to be patched.  In the interests of promoting [Occam's razor](https://en.wikipedia.org/wiki/Occam's_razor) and the princible of simplicity, we chose to take a simpler route.  Specifically, it was easier to reason about what was needed to accomplish the task and get on with playing around with a Finch from within Alice :)
 
 ## Contributing
 
-Contributions are very welcome and are accepted through pull requests.
+Contributions are very welcome and are accepted through pull requests.  Simply create a [fork on GitHub](https://help.github.com/articles/fork-a-repo/), commit and push your updates to your fork, and then [submit a pull request](https://help.github.com/articles/using-pull-requests/) for review.
 
 ## Bugs and Features Requests
 
-Please submit all bug reports and feature requests to the project [issue tracker](https://github.com/bradcfisher/finch4alice/issues).
+Please submit all bug reports and feature requests to the project [issue tracker](issues/).
 
 ## Disclaimers & License
 
