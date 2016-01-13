@@ -7,7 +7,7 @@ Finch 4 Alice provides a simple extension to Alice 3 that adds methods for contr
 
 ## Building
 
-You can build the Jar only for manual installation, build and install directly, or create several types of installers.
+You can build the Jar only for manual installation, build and install directly, or create an interactive multi-platform installer.
 
 ### Prerequisites
 
@@ -107,20 +107,21 @@ Under Linux, you should be able to run the install as a normal user, as long as 
 
 To ensure that everything is installed and configured properly:
 
-1. Launch Alice
-2. When prompted to load a project, simple close the dialog by clicking 'Cancel'.
+* Launch Alice
+
+* When prompted to load a project, simple close the dialog by clicking 'Cancel'.
 
 ![Select Project Dialog](images/readme/select_project_dialog.png "Click the 'Cancel' button to close this dialog")
 
-3. Select the `Help -> Show System Properties` menu
+* Select the `Help -> Show System Properties` menu
 
 ![Show System Properties Menu](images/readme/show_system_properties_menu.png "The 'Show System Properties' menu")
 
-4. Click `Show...` to the right of `java.class.path`
+* Click `Show...` to the right of `java.class.path`
 
 ![Show System Properties Dialog](images/readme/show_system_properties_dialog.png "The 'Show System Properties' dialog")
 
-5. Verify that the finch4alice jar is listed at the beginning of the class path.
+* Verify that the finch4alice jar is listed at the beginning of the class path.
 
 ![System Property: java.class.path Dialog](images/readme/java_class_path_dialog.png "The 'System Property: java.class.path' dialog")
 
@@ -130,11 +131,11 @@ Now that you have Finch 4 Alice installed, what can you do with it?  In this sec
 
 #### Prerequisites
 
-1. You need an installation of Alice 3, with Finch 4 Alice installed.
+* You need an installation of Alice 3, with Finch 4 Alice installed.
 
-2. You need a Finch robot, properly connected to your computer.  If you don't happen to have a Finch, they can be purchased from the [Finch Robot website](http://www.finchrobot.com/).
+* You need a Finch robot, properly connected to your computer.  If you don't happen to have a Finch, they can be purchased from the [Finch Robot website](http://www.finchrobot.com/).
 
-2. You will need to install the BirdBrain Robot Server.  You can find installers for various operating systems in the [BirdBrain Robot Server GitHub repository](https://github.com/BirdBrainTechnologies/BirdBrainRobotServer/tree/master/Packages).  Perhaps surprisingly, Finch 4 Alice doesn't actually communicate directly with a Finch robot.  It relies on the BirdBrain Robot Server to do that.  This simplifies the implementation and reduces the number of dependencies that would need to be patched into Alice.
+* You will need to install the BirdBrain Robot Server.  You can find installers for various operating systems in the [BirdBrain Robot Server GitHub repository](https://github.com/BirdBrainTechnologies/BirdBrainRobotServer/tree/master/Packages).  Perhaps surprisingly, Finch 4 Alice doesn't actually communicate directly with a Finch robot.  It relies on the BirdBrain Robot Server to do that.  This simplifies the implementation and reduces the number of dependencies that would need to be patched into Alice.
 
 #### Example project
 
@@ -147,20 +148,31 @@ Now that you have Finch 4 Alice installed, what can you do with it?  In this sec
 ![Select Project Dialog](images/readme/select_project_dialog.png "Select 'GRASS', then click the 'OK' button to create a new project")
 
 - Click `Setup Scene`
+
 - Click `Transport classes`
+
 - Click `Watercraft classes`
+
 - Click `new FishingBoat()`
+
 - Click `Edit Code`
+
 - Drag the `finchSetLED` procedure from the pane on the left into the code window for 'myFirstMethod'
 - Select `Custom Whole Number...`, then `0` for the second parameter and `0` for the third parameter.
 - Enter `255` when prompted for the custom value for the first parameter.
+
 - Drag the `delay` procedure into 'myFirstMethod'
 - Select `2.0` for the number of seconds to delay
+
 - Drag the `finchSetLED` procedure into 'myFirstMethod'
 - Select `0` for all three parameters.
+
 - Drag the `say` procedure into 'myFirstMethod'
 - Select `Custom TextString...` and enter `All done` when prompted.
+
 - You are now ready to try running your test project.  Click the `Run` button and you should see the LED in the nose of your Finch turn red for two seconds, then turn off.
+
+> More example projects can be found in the `examples` subfolder.
 
 ## How it works
 
@@ -219,6 +231,14 @@ The new procedures and functions are listed below.  If you want the full details
 `boolean finchIsLeftWingDown()`
 
 `boolean finchIsRightWingDown()`
+
+## Troubleshooting FAQ
+
+*Symptom*: Alice raises an exception when one of the example projects is loaded.
+
+*Cause*: This is most likely caused by trying to load a project into an installation of Alice that has not yet had Finch 4 Alice installed.  The example projects contain references to the new methods added by Finch 4 Alice, and exceptions are raised when those instructions are processed without the Finch 4 Alice code loaded.
+
+---
 
 ## Debugging and Logging
 
