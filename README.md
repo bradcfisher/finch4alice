@@ -18,8 +18,8 @@ You must have an installation of [Alice 3](http://www.alice.org/) on the build m
 | Platform | Default Installation Location |
 | -------- | ----------------------------- |
 | Windows  | C:\Program Files\Alice 3      |
-| Linux    | ~/Alice3/lib                  |
-| Max OS X | ~/Alice3/lib                  |
+| Linux    | ~/Alice3                      |
+| Max OS X | ~/Alice3                      |
 
 Finch 4 Alice has been tested against Alice version 3.2.5.0.0.  Previous versions used a different type of installer and are not compatible.
 
@@ -68,6 +68,20 @@ This installer is the easiest to use for most end-users.  It provides an intuiti
 ```
 
 Once generated, you can find the installer under `build/distributions/finch4alice-<version>-installer.jar`.
+
+The installer Jar can be executed using java:
+
+```
+java -jar finch4alice-<version>-installer.jar
+```
+
+A Windows executable installer can also be created from the installer Jar:
+
+```
+./gradlew launch4j
+```
+
+The generated EXE will be placed under `build/distributions/finch4alice-<version>-setup.exe`.
 
 #### Manual installation
 

@@ -5,7 +5,11 @@
 		xsi:schemaLocation="http://izpack.org/schema/installation http://izpack.org/schema/5.0/izpack-installation-5.0.xsd"> 
 	<variables>
 		<variable name="DesktopShortcutCheckboxEnabled" value="false"/>
+		<variable name="TargetPanel.dir.windows" value="${APPLICATIONS_DEFAULT_ROOT}Alice 3"/>
+		<variable name="TargetPanel.dir.unix" value="${APPLICATIONS_DEFAULT_ROOT}Alice3"/>
 	</variables>
+
+<!-- TODO: Images, etc -->
 
 	<info>
 		<appname>@{app.title}</appname>
@@ -14,12 +18,42 @@
 		<authors>
 			<author name="Brad Fisher" email="fisher.brad@uwlax.edu"/>
 		</authors>
-		<run-privileged />
-<!--	<run-privileged condition="izpack.windowsinstall|izpack.macinstall"/> -->
+<!--		<run-privileged condition="!izpack.linuxinstall" /> -->
 	</info>
 
+	<conditions>
+		<condition type="and" id="ConditionValidator.isAliceInstallDir">
+			<condition type="exists">
+				<file>${INSTALL_PATH}</file>
+			</condition>
+			<condition type="exists">
+				<file>${INSTALL_PATH}/lib</file>
+			</condition>
+			<condition type="exists">
+				<file>${INSTALL_PATH}/ext</file>
+			</condition>
+			<condition type="or">
+				<condition type="and">
+					<condition type="ref" refid="izpack.windowsinstall"/>
+					<condition type="exists">
+						<file>${INSTALL_PATH}/Alice 3.exe</file>
+					</condition>
+				</condition>
+				<condition type="and">
+					<condition type="or">
+						<condition type="ref" refid="izpack.macinstall"/>
+						<condition type="ref" refid="izpack.linuxinstall"/>
+					</condition>
+					<condition type="exists">
+						<file>${INSTALL_PATH}/Alice3</file>
+					</condition>
+				</condition>
+			</condition>
+		</condition>
+	</conditions>
+	
 	<guiprefs width="640" height="480" resizable="yes">
-		<!-- <modifier key="showDebugWindow" value="true"/> -->
+		<modifier key="showDebugWindow" value="true"/>
 	</guiprefs>
 
 	<locale>
@@ -31,9 +65,10 @@
 		The ids must be these ones if you want to use the LicencePanel and/or the InfoPanel.
 	-->
 	<resources>
-<!--		<res src="shortcutSpec.xml" id="shortcutSpec.xml"/> -->
+		<res id="CustomLangPack.xml_eng" src="../src/main/izpack/CustomLangPack.xml_eng" />
+
 		<res id="LicencePanel.licence" src="../LICENSE"/>
-		<res id="InfoPanel.info" src="../README.md"/>
+<!--		<res id="InfoPanel.info" src="../README.md"/> -->
 	</resources>
 
 	<!--
@@ -43,19 +78,18 @@
 	<panels>
 		<panel classname="HelloPanel"/>
 		<panel classname="LicencePanel"/>
-		<panel classname="TargetPanel"/>
+		<panel classname="TargetPanel">
+			<configuration>
+				<ShowCreateDirectoryMessage>false</ShowCreateDirectoryMessage>
+				<ShowExistingDirectoryWarning>false</ShowExistingDirectoryWarning>
+			</configuration>
+			<validator classname="com.izforge.izpack.installer.validator.ConditionValidator" />
+		</panel>
 		<panel classname="PacksPanel"/>
 		<panel classname="InstallPanel"/>
 		<panel classname="ShortcutPanel"/>
 		<panel classname="FinishPanel"/>
 	</panels>
-
-	<conditions>
-		<condition type="or" id="linuxOrMac">
-			<condition type="ref" refid="izpack.linuxinstall"/>
-			<condition type="ref" refid="izpack.macinstall" />
-		</condition>
-	</conditions>
 
 	<packs>
 		<pack name="Core Files" required="yes">
@@ -63,13 +97,14 @@
 			<file src="../README.md" targetdir="$INSTALL_PATH/ext/@{app.name}"/>
 			<file src="../LICENSE" targetdir="$INSTALL_PATH/ext/@{app.name}"/>
 			<singlefile src="libs/@{app.name}-@{app.version}.jar" target="$INSTALL_PATH/ext/@{app.name}/@{app.name}.jar"/>
-			
+
 			<singlefile src="../src/main/resources/Alice 3.vmoptions.windows" target="$INSTALL_PATH/Alice 3.vmoptions">
-				<condition>izpack.windowsinstall</condition>
+				<os family="windows"/>
 			</singlefile>
 
 			<singlefile src="../src/main/resources/Alice 3.vmoptions.linux" target="$INSTALL_PATH/Alice 3.vmoptions">
-				<condition>linuxOrMac</condition>
+				<os family="linux"/>
+				<os family="mac"/>
 			</singlefile>
 		</pack>
 	</packs>

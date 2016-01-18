@@ -1,19 +1,7 @@
-// /* CAN REMOVE ONCE IzPack PULL REQUEST #408 IS MERGED AND PUBLISHED
-buildscript {
-  repositories {
-	jcenter()
-  }
-  dependencies {
-	// Workaround for broken izpack ant task.  To get access to ConfigHolder
-    classpath group: 'org.codehaus.izpack', name: 'izpack-ant', version: '5.0.6'
-  }
-}
-//*/
 
 plugins {
 	id "java"
-// CAN UNCOMMENT THE FOLLOWING ONCE IzPack PULL REQUEST #408 IS MERGED AND PUBLISHED
-//	id "com.bmuschko.izpack" version "2.1"	// For building cross-platform installer
+	id "com.bmuschko.izpack" version "2.1"	// For building cross-platform installer
 	id "org.ajoberstar.github-pages" version "1.3.2"
 	id 'edu.sc.seis.launch4j' version '1.6.1'
 }
@@ -134,75 +122,10 @@ dependencies {
 	testCompile 'junit:junit:4.12'
 
 	// Building izpack installer requires this
-	// It provides the underlying Ant plugin used to build the installer, among other things
-//	izpack 'org.codehaus.izpack:izpack-standalone-compiler:4.3.5'
-
-	izpack 'org.codehaus.izpack:izpack-ant:5.0.6'
-
-/* FOR TESTING LOCAL DEPENDENCY OVERRIDES
-	izpack files('../t/picocontainer/build/libs/picocontainer-2.14.1.jar')
-	izpack files("$buildDir/libs/override.jar") {
-		builtBy 'buildIzpackOverrides'
-	}
-*/
-
-/* FOR TESTING LOCAL DEPENDENCY OVERRIDES
-	izpack files(
-		"$buildDir/../../t/izpack/izpack-test-common/target/izpack-test-common-5.0.7-SNAPSHOT.jar",
-		"$buildDir/../../t/izpack/izpack-native/target/izpack-native-5.0.7-SNAPSHOT.jar",
-		"$buildDir/../../t/izpack/izpack-panel/target/izpack-panel-5.0.7-SNAPSHOT.jar",
-		"$buildDir/../../t/izpack/izpack-event/target/izpack-event-5.0.7-SNAPSHOT.jar",
-		"$buildDir/../../t/izpack/izpack-uninstaller/target/izpack-uninstaller-5.0.7-SNAPSHOT.jar",
-		"$buildDir/../../t/izpack/izpack-util/target/izpack-util-5.0.7-SNAPSHOT.jar",
-		"$buildDir/../../t/izpack/izpack-tools/target/izpack-tools-5.0.7-SNAPSHOT.jar",
-		"$buildDir/../../t/izpack/izpack-compiler/target/izpack-compiler-5.0.7-SNAPSHOT.jar",
-		"$buildDir/../../t/izpack/izpack-api/target/izpack-api-5.0.7-SNAPSHOT.jar",
-		"$buildDir/../../t/izpack/izpack-core/target/izpack-core-5.0.7-SNAPSHOT.jar",
-		"$buildDir/../../t/izpack/izpack-installer/target/izpack-installer-5.0.7-SNAPSHOT.jar",
-		"$buildDir/../../t/izpack/izpack-gui/target/izpack-gui-5.0.7-SNAPSHOT.jar",
-		"$buildDir/../../t/izpack/izpack-ant/target/izpack-ant-5.0.7-SNAPSHOT.jar",
-		"$buildDir/../../t/izpack/izpack-native-parent/izpack-native/target/izpack-native-5.0.7-SNAPSHOT.jar"
-	)
-//	izpack 'org.apache.ant:ant:1.9.4'
-	izpack 'bsf:bsf:2.4.0'
-	izpack 'jakarta-regexp:jakarta-regexp:1.4'
-	izpack 'org.picocontainer:picocontainer:2.14.1'
-	izpack 'xpp3:xpp3:1.1.4c'
-	// Commons apache
-	izpack 'commons-lang:commons-lang:2.6'
-	izpack 'commons-cli:commons-cli:1.2'
-	izpack 'commons-io:commons-io:2.4'
-	izpack 'org.apache.commons:commons-compress:1.3'
-	// laf (look-and-feel)
-	izpack 'jline:jline:2.12'
-*/
+	// It provides the underlying Ant plugin and compiler used to build the installer, among other things
+	izpack 'org.codehaus.izpack:izpack-ant:5.0.7'
 
 }
-
-/* FOR TESTING LOCAL DEPENDENCY OVERRIDES
-task copyIzpackOverrideClasses(type: Copy) {
-	into "$buildDir/class-overrides"
-
-	from(file('$projectDir/../../t/izpack/izpack-ant/target/classes/com/izforge/izpack/ant')) {
-		into "com/izforge/izpack/ant"
-		include "IzpackAntRunnable.class"
-		include "IzPackTask.class"
-	}
-}
-
-task buildIzpackOverrides(type: Jar, dependsOn: copyIzpackOverrideClasses) {
-	from(copyIzpackOverrideClasses.outputs.files) {
-		manifest {
-			attributes 'Built-By': System.getProperty("user.name"),
-					   'Built-Date': new Date(),
-					   'Built-JDK': System.getProperty("java.version")
-		}
-
-		archiveName = "override.jar"
-		destinationDir = file("$buildDir/libs")
-	}
-}
-*/
 
 // Append the Alice Jars to the compile class path
 sourceSets.main.compileClasspath += configurations.provided
@@ -229,62 +152,7 @@ ext.izpackProperties = [
 //		'app.subpath': "Finch4Alice-$version",
 	]
 
-// /* CAN REMOVE ONCE IzPack PULL REQUEST #408 IS MERGED AND PUBLISHED
-task izPackCreateInstaller(dependsOn: jar) {
 
-	String baseDir = project.buildDir.canonicalPath
-
-	File installFile = file("src/main/izpack/install.xml")
-
-	String outputFile = izpackJar.canonicalPath
-
-	String installerType = "standard"
-
-	String compression = "deflate"
-
-	int compressionLevel = 9
-
-	outputs.file izpackJar
-
-	doLast {
-		izpackJar.parentFile.mkdirs()
-
-		logger.info("Starting to create IzPack installer from base directory '${baseDir}' and install file '${installFile}'.")
-
-		// Perform property substitutions on the XML file...
-		File substInstallFile = file("${project.buildDir}/izpack-install.xml")
-
-		ant.taskdef(name: 'izpack', classpath: configurations.izpack.asPath, classname: 'com.izforge.izpack.ant.IzPackTask')
-
-		izpackProperties.entrySet().each {
-			ant.property(name: it.key, value: it.value)
-		}
-
-		// Perform property replacement
-		com.izforge.izpack.ant.ConfigHolder config = new com.izforge.izpack.ant.ConfigHolder(ant.project)
-		config.addText( new String(installFile.bytes, "UTF-8") )
-		substInstallFile.withWriter("UTF-8") { bw ->
-			bw.write(config.text)
-		}
-
-		ant.izpack(
-			basedir: baseDir,
-			input: substInstallFile.canonicalPath,
-			output: outputFile,
-			installerType: installerType,
-			compression: compression,
-			compressionlevel: compressionLevel
-	//		,mkdirs: true
-		) //{
-//			config(getInstallFile().text)
-//		}
-
-		logger.info("Finished creating IzPack installer.")
-	}
-}
-// */
-
-/* CAN UNCOMMENT BLOCK ONCE IzPack PULL REQUEST #408 IS MERGED AND PUBLISHED
 // Ensure izPackCreateInstaller runs _after_ the jar task
 tasks.izPackCreateInstaller.dependsOn(jar)
 
@@ -296,12 +164,11 @@ izpack {
 	compressionLevel = 9
 	appProperties = izpackProperties
 }
-// */
 
 launch4j {
   //mainClassName = 'com.example.myapp.Start'
   //icon = 'icons/myApp.ico'
-  outfile = "${project.name}-setup.exe"
+  outfile = "${project.name}-${project.version}-setup.exe"
   copyright = "Copyright (c) 2015, Brad Fisher"
   jar = project.izpackJar
 }
@@ -310,8 +177,18 @@ afterEvaluate {
 	tasks.createExeWithBin.dependsOn(izPackCreateInstaller)
 	tasks.createExeWithJar.dependsOn(izPackCreateInstaller)
 
-	task izpack2exe(dependsOn: createExeWithJar) {
-	} // izpack2exe
+	tasks.launch4j.doLast {
+		copy {
+			into "$buildDir/distributions"
+			from (launch4j.outputDir) {
+				include "*.exe"
+			}
+		}
+	}
+
+	// The following is required to ensure the doLast added above is run.
+	// Without it, the launch4j task is always seen as up-to-date.
+	tasks.launch4j.outputs.upToDateWhen() { return false }
 }
 
 // Configure the 'prepareGhPages' and 'publishGhPages' tasks for updating the javadoc on gh-pages
