@@ -103,8 +103,8 @@ public class FinchHTTP {
 	 * @param	path	Relative path from the server root URL of the service to request
 	 * @param	args	Array of arguments for the request.  Each argument in this array is appended
 	 * 					to the request URL separated by slashes.
-	 * @return	The response returned by the server on success.  Returns "null" if a connection
-	 *			could not be established to the specified server.
+	 * @return	The response returned by the server on success.  Returns the string {@code "null"} if
+	 *			a connection could not be established to the specified server.
 	 */
 	private String httpGET(String path, String... args) {
 		//System.out.println("httpGET: path="+ path +" args="+ (args == null ? "null" : Arrays.toString(args)));
@@ -163,8 +163,8 @@ public class FinchHTTP {
 
 	/**
 	 * Validates the response received from the Bird Brain Robot Server as a result of an "out" query.
-	 * Currently, this will simply output a warning message to the console if an unexpected reponse
-	 * is received.
+	 * <p>Currently, this will simply output a warning message to the console if an unexpected reponse
+	 * is received.</p>
 	 * @param	result	The response received from the server.
 	 */
 	private void validateOutResult(String result) {
@@ -174,8 +174,8 @@ public class FinchHTTP {
 
 	/**
 	 * Tests whether the Bird Brain Robot Server is running and a Finch is currently connected.
-	 * @return	Returns true if the Bird Brain Robot Server can be contacted and responds with
-	 *			status data for an attached Finch, otherwise returns false.
+	 * @return	Returns {@code true} if the Bird Brain Robot Server can be contacted and responds with
+	 *			status data for an attached Finch, otherwise returns {@code false}.
 	 */
 	public boolean isConnected() {
 		// The server will return 'null' for the sensor inputs if finch is not connected
@@ -186,11 +186,11 @@ public class FinchHTTP {
 	 * Plays a tone at the specified frequency for the specified duration on the Finch's
 	 * internal buzzer.
 	 *
-	 * Middle C is about 262Hz. Visit http://www.phy.mtu.edu/~suits/notefreqs.html for frequencies
-	 * of musical notes.
+	 * <p>Middle C is about 262Hz. Visit <a href="http://www.phy.mtu.edu/~suits/notefreqs.html">http://www.phy.mtu.edu/~suits/notefreqs.html</a> for frequencies
+	 * of musical notes.</p>
 	 *
-	 * Note that buzz is non-blocking - so if you call two buzz methods in a row without an
-	 * intervening sleep, you will only hear the second buzz (it will over-write the first buzz). 
+	 * <p>Note that buzz is non-blocking - so if you call two buzz methods in a row without an
+	 * intervening sleep, you will only hear the second buzz (it will over-write the first buzz).</p>
 	 *
 	 * @param	frequency	Frequency in Hertz of the tone to be played
 	 * @param	duration	Duration in milliseconds of the tone
@@ -203,8 +203,8 @@ public class FinchHTTP {
 	 * Plays a tone at the specified frequency for the specified duration on the Finch's
 	 * internal buzzer, and blocks until complete.
 	 *
-	 * Middle C is about 262Hz. Visit http://www.phy.mtu.edu/~suits/notefreqs.html for frequencies
-	 * of musical notes.
+	 * <p>Middle C is about 262Hz. Visit <a href="http://www.phy.mtu.edu/~suits/notefreqs.html">http://www.phy.mtu.edu/~suits/notefreqs.html</a> for frequencies
+	 * of musical notes.</p>
 	 *
 	 * @param	frequency	Frequency in Hertz of the tone to be played
 	 * @param	duration	Duration in milliseconds of the tone
@@ -218,10 +218,10 @@ public class FinchHTTP {
 	 * Takes the text of 'sayThis' and synthesizes it into a sound file and plays the sound file
 	 * over computer speakers.
 	 *
-	 * sayThis can be arbitrarily long and can include variable arguments.
+	 * <p>{@code sayThis} can be arbitrarily long and can include variable arguments.</p>
 	 *
-	 * Example:
-	 *   myFinch.saySomething("My light sensor has a value of "+ lightSensor + " and temperature is " + tempInCelcius);
+	 * <p>Example:</p>
+	 * {@code myFinch.saySomething("My light sensor has a value of "+ lightSensor + " and temperature is " + tempInCelcius);}
 	 *
 	 * Note that this version of saySomething is non-blocking - so if you call two saySomethign
 	 * methods in a row without an intervening sleep, you will only hear the second call (it will
@@ -237,11 +237,11 @@ public class FinchHTTP {
 	 * Takes the text of 'sayThis' and synthesizes it into a sound file and plays the sound file
 	 * over computer speakers.
 	 *
-	 * sayThis can be arbitrarily long and can include variable arguments. The duration argument
-	 * allows you to delay program execution for a number of milliseconds.
+	 * <p>{@code sayThis} can be arbitrarily long and can include variable arguments. The duration
+	 * argument allows you to delay program execution for a number of milliseconds.</p>
 	 *
-	 * Example:
-	 *   myFinch.saySomething("My light sensor has a value of "+ lightSensor + " and temperature is " + tempInCelcius);
+	 * <p>Example:</p>
+	 * {@code myFinch.saySomething("My light sensor has a value of "+ lightSensor + " and temperature is " + tempInCelcius);}
 	 *
 	 * @param	sayThis		The string of text that will be spoken by the computer
 	 * @param	duration	The time to block while playing the sound in milliseconds
@@ -255,11 +255,11 @@ public class FinchHTTP {
 	 * Plays a tone over the computer speakers or headphones at a given frequency (in Hertz) for
 	 * a specified duration in milliseconds.
 	 *
-	 * Middle C is about 262Hz. Visit http://www.phy.mtu.edu/~suits/notefreqs.html for frequencies
-	 * of musical notes.
+	 * <p>Middle C is about 262Hz. Visit <a href="http://www.phy.mtu.edu/~suits/notefreqs.html">http://www.phy.mtu.edu/~suits/notefreqs.html</a> for frequencies
+	 * of musical notes.</p>
 	 *
-	 * Note, playTone will block program execution for the specified number of milliseconds while
-	 * the tone is played.
+	 * <p>Note, playTone will block program execution for the specified number of milliseconds while
+	 * the tone is played.</p>
 	 *
 	 * @param	frequency	The frequency of the tone in Hertz
 	 * @param	duration	The time to play the tone in milliseconds
@@ -276,8 +276,8 @@ public class FinchHTTP {
 	 * Plays a tone over the computer speakers or headphones at a given frequency (in Hertz) for
 	 * a specified duration in milliseconds at a specified volume.
 	 *
-	 * Middle C is about 262Hz. Visit http://www.phy.mtu.edu/~suits/notefreqs.html for frequencies
-	 * of musical notes.
+	 * <p>Middle C is about 262Hz. Visit <a href="http://www.phy.mtu.edu/~suits/notefreqs.html">http://www.phy.mtu.edu/~suits/notefreqs.html</a> for frequencies
+	 * of musical notes.</p>
 	 *
 	 * Note, playTone will block program execution for the specified number of milliseconds while
 	 * the tone is played.
@@ -298,8 +298,8 @@ public class FinchHTTP {
 	/**
 	 * Plays a wav file over computer speakers at the specificied fileLocation path.
 	 *
-	 * If you place the audio file in the same path as your source, you can just specify the
-	 * name of the file.
+	 * <p>If you place the audio file in the same path as your source, you can just specify the
+	 * name of the file.</p>
 	 *
 	 * @param	fileLocation	The path to the file to play.  The file path specified here is
 	 *							local to the current JVM.  The sound file will be sent to the
@@ -362,33 +362,27 @@ public class FinchHTTP {
 	} // getLightSensors
 
 	/**
-	 * Returns true if the left light sensor is less than the value specified by limit, false otherwise.
+	 * Returns {@code true} if the specified {@code limit} is less than the left light sensor value.
 	 *
 	 * @param	limit	The value the light sensor needs to exceed
-	 * @return	whether the light sensor exceeds the value specified by limit
+	 * @return	whether the light sensor exceeds the value specified by {@code limit}
 	 */
 	public boolean isLeftLightSensor(double limit) {
-		// TODO: The javadoc on finchrobot.com is contradictory about what this function returns.
-		//		Need to review source to determine actual behavior (eg. return true if > limit or
-		//		if < limit?)
 		return (getLeftLightSensor() > limit);
 	} // isLeftLightSensor
 
 	/**
-	 * Returns true if the right light sensor is less than the value specified by limit, false otherwise.
+	 * Returns {@code true} if the specified {@code limit} is less than the right light sensor value.
 	 *
 	 * @param	limit	The value the light sensor needs to exceed
-	 * @return	whether the light sensor exceeds the value specified by limit
+	 * @return	whether the light sensor exceeds the value specified by {@code limit}
 	 */
 	public boolean isRightLightSensor(double limit) {
-		// TODO: The javadoc on finchrobot.com is contradictory about what this function returns.
-		//		Need to review source to determine actual behavior (eg. return true if > limit or
-		//		if < limit?)
 		return (getRightLightSensor() > limit);
 	} // isRightLightSensor
 
 	/**
-	 * Returns true if there is an obstruction in front of the left side of the robot.
+	 * Returns {@code true} if there is an obstruction in front of the left side of the robot.
 	 * @return	Whether an obstacle exists in front of the left side of the robot.
 	 */
 	public boolean isObstacleLeftSide() {
@@ -397,7 +391,7 @@ public class FinchHTTP {
 	} // isObstacleLeftSide
 
 	/**
-	 * Returns true if there is an obstruction in front of the right side of the robot.
+	 * Returns {@code true} if there is an obstruction in front of the right side of the robot.
 	 * @return	Whether an obstacle exists in front of the right side of the robot.
 	 */
 	public boolean isObstacleRightSide() {
@@ -406,7 +400,7 @@ public class FinchHTTP {
 	} // isObstacleRightSide
 
 	/**
-	 * Returns true if either left or right obstacle sensor detect an obstacle.
+	 * Returns {@code true} if either left or right obstacle sensor detect an obstacle.
 	 * @return	Whether either obstacle sensor sees an obstacle.
 	 */
 	public boolean isObstacle() {
@@ -428,11 +422,11 @@ public class FinchHTTP {
 	} // getObstacleSensors
 
 	/**
-	 * This method uses Thread.sleep to cause the currently running program to sleep for the
-	 * specified number of milliseconds.
+	 * This method uses {@link java.lang.Thread#sleep(long)} to cause the currently running program to
+	 * sleep for the specified number of milliseconds.
 	 *
-	 * Note, this method may return before the specified number of milliseconds have elapsed, if
-	 * the thread has been interrupted (eg. signalled to terminate).
+	 * <p>Note, this method may return before the specified number of milliseconds have elapsed, if
+	 * the thread has been interrupted (eg. signalled to terminate).</p>
 	 *
 	 * @param	ms	The number of milliseconds to sleep for. Valid values are all positive integers.
 	 */
@@ -448,10 +442,10 @@ public class FinchHTTP {
 	/**
 	 * This method simultaneously sets the velocities of both wheels.
 	 *
-	 * Current valid values range from -255 to 255; negative values cause a wheel to move backwards.
+	 * <p>Current valid values range from -255 to 255; negative values cause a wheel to move backwards.</p>
 	 *
-	 * If timeToHold is positive, this method blocks further program execution for the amount of
-	 * time specified by timeToHold, and then stops the wheels once time has elapsed. 
+	 * <p>If {@code timeToHold} is positive, this method blocks further program execution for the amount of
+	 * time specified by {@code timeToHold}, and then stops the wheels once time has elapsed.</p>
 	 *
 	 * @param	leftVelocity	The velocity at which to move the left wheel
 	 * @param	rightVelocity	The velocity at which to move the right wheel
@@ -468,7 +462,7 @@ public class FinchHTTP {
 	/**
 	 * This method simultaneously sets the velocities of both wheels.
 	 *
-	 * Current valid values range from -255 to 255; negative values cause a wheel to move backwards.
+	 * <p>Current valid values range from -255 to 255; negative values cause a wheel to move backwards.</p>
 	 *
 	 * @param	leftVelocity	The velocity at which to move the left wheel
 	 * @param	rightVelocity	The velocity at which to move the right wheel
@@ -491,18 +485,18 @@ public class FinchHTTP {
 	} // stopWheels
 
 	/**
-	 * Sets the color of the LED in the Finch's beak using a Color object.
-	 * @param	color	is a Color object that determines the beaks color
+	 * Sets the color of the LED in the Finch's beak using a {@link java.awt.Color} object.
+	 * @param	color	is a {@link java.awt.Color} object that determines the beaks color
 	 */
 	public void setLED(Color color) {
 		setLED(color.getRed(), color.getGreen(), color.getBlue());
 	} // setLED
 
 	/**
-	 * Sets the color of the LED in the Finch's beak using a Color object for the length of time
-	 * specified by duration.
+	 * Sets the color of the LED in the Finch's beak using a {@link java.awt.Color} object for the
+	 * length of time specified by duration.
 	 *
-	 * @param	color	is a Color object that determines the beaks color
+	 * @param	color		is a {@link java.awt.Color} object that determines the beaks color
 	 * @param	duration	is the length of time the color will display on the beak
 	 */
 	public void setLED(Color color, int duration) {
@@ -512,10 +506,10 @@ public class FinchHTTP {
 	/**
 	 * Sets the color of the LED in the Finch's beak.
 	 *
-	 * The LED can be any color that can be created by mixing red, green, and blue; turning on
-	 * all three colors in equal amounts results in white light.
+	 * <p>The LED can be any color that can be created by mixing red, green, and blue; turning on
+	 * all three colors in equal amounts results in white light.</p>
 	 *
-	 * Valid ranges for the red, green, and blue elements are 0 to 255.
+	 * <p>Valid ranges for the red, green, and blue elements are 0 to 255.</p>
 	 *
 	 * @param	red		sets the intensity of the red element of the LED
 	 * @param	green	sets the intensity of the green element of the LED
@@ -535,10 +529,10 @@ public class FinchHTTP {
 	/**
 	 * Sets the color of the LED in the Finch's beak for the length of time specified by duration.
 	 *
-	 * The LED can be any color that can be created by mixing red, green, and blue; turning on
-	 * all three colors in equal amounts results in white light.
+	 * <p>The LED can be any color that can be created by mixing red, green, and blue; turning on
+	 * all three colors in equal amounts results in white light.</p>
 	 *
-	 * Valid ranges for the red, green, and blue elements are 0 to 255.
+	 * <p>Valid ranges for the red, green, and blue elements are 0 to 255.</p>
 	 *
 	 * @param	red		sets the intensity of the red element of the LED
 	 * @param	green	sets the intensity of the green element of the LED
@@ -553,9 +547,11 @@ public class FinchHTTP {
 
 	/**
 	 * This method returns the current X-axis acceleration value experienced by the robot.
-	 * Values for acceleration range from -1.5 to +1.5g. The X-axis is the beak-tail axis.
 	 *
-	 * @return	The X-axis acceleration value
+	 * <p>Values for acceleration range from -1.5 to +1.5g. The X-axis is the beak-tail axis, with
+	 * positive values indicating acceleration in the direction of the beak.</p>
+	 *
+	 * @return	The X-axis acceleration value.  If unable to connect, returns {@code NaN}.
 	 */
 	public double getXAcceleration() {
 		double[] accelerations = getAccelerations();
@@ -564,9 +560,11 @@ public class FinchHTTP {
 
 	/**
 	 * This method returns the current Y-axis acceleration value experienced by the robot.
-	 * Values for acceleration range from -1.5 to +1.5g. The Y-axis is the wheel-to-wheel axis.
 	 *
-	 * @return	The Y-axis acceleration value
+	 * <p>Values for acceleration range from -1.5 to +1.5g. The Y-axis is the wheel-to-wheel axis,
+	 * with positive values indicating acceleration in the direction of the right wheel.</p>
+	 *
+	 * @return	The Y-axis acceleration value.  If unable to connect, returns {@code NaN}.
 	 */
 	public double getYAcceleration() {
 		double[] accelerations = getAccelerations();
@@ -575,10 +573,12 @@ public class FinchHTTP {
 
 	/**
 	 * This method returns the current Z-axis acceleration value experienced by the robot.
-	 * Values for acceleration range from -1.5 to +1.5g. The Z-axis runs perpendicular to the
-	 * Finch's circuit board.
 	 *
-	 * @return	The Z-axis acceleration value
+	 * <p>Values for acceleration range from -1.5 to +1.5g. The Z-axis runs perpendicular to the
+	 * Finch's circuit board, with positive values indicating acceleration toward the bottom of the
+	 * Finch.</p>
+	 *
+	 * @return	The Z-axis acceleration value.  If unable to connect, returns {@code NaN}.
 	 */
 	public double getZAcceleration() {
 		double[] accelerations = getAccelerations();
@@ -589,10 +589,11 @@ public class FinchHTTP {
 	 * Use this method to simultaneously return the current X, Y, and Z accelerations experienced
 	 * by the robot.
 	 *
-	 * Values for acceleration can be in the range of -1.5g to +1.5g. When the robot is on a flat
-	 * surface, X and Y should be close to 0g, and Z should be near +1.0g.
+	 * <p>Values for acceleration can be in the range of -1.5g to +1.5g. When the robot is on a flat
+	 * surface, X and Y should be close to 0g, and Z should be near +1.0g.</p>
 	 *
-	 * @return	an array of 3 doubles containing the X, Y, and Z acceleration values
+	 * @return	an array of 3 doubles containing the X, Y, and Z acceleration values.  If unable to
+	 *			connect, returns {@code null}.
 	 */
 	public double[] getAccelerations() {
 		String[] accelerations = httpGET("finch/in/accelerations").split(" ");
@@ -612,9 +613,10 @@ public class FinchHTTP {
 
 	/**
 	 * Returns the current orientation of the Finch.
-	 * @return	When connected to a Finch, returns one of: "Level", "Upside Down", "Beak Up",
-	 *			"Beak Down", "Left Wing Down", "Right Wing Down", "In Between".  If unable to
-	 *			connect, returns null.
+	 * @return	When connected to a Finch, returns one of: {@code "Level"}, {@code "Upside Down"},
+	 *			{@code "Beak Up"}, {@code "Beak Down"}, {@code "Left Wing Down"},
+	 *			{@code "Right Wing Down"}, {@code "In Between"}.  If unable to connect, returns
+	 *			{@code null}.
 	 */
 	public String getOrientation() {
 		String result = httpGET("finch/in/orientation");
@@ -624,56 +626,116 @@ public class FinchHTTP {
 	} // getOrientation
 
 	/**
-	 * This method returns true if the beak is up (Finch sitting on its tail), false otherwise
-	 * @return	true if beak is pointed at ceiling
+	 * This method returns the current X-axis angle of the robot relative to a plane parallel to
+	 * the ground.
+	 *
+	 * <p>Values for the angle are in the range [-Pi, Pi].  The X-axis is the beak-tail axis.</p>
+	 *
+	 * @return	The X-axis angle value in radians, with 0 meaning the Finch is level on the
+	 *			beak-tail axis, negative values meaning the beak is angled downward, and positive
+	 *			values meaning the beak is angled up.  If unable to connect, returns {@code NaN}.
+	 */
+	public double getXOrientationAngle() {
+		double[] angles = getOrientationAngles();
+		return ((angles != null) ? angles[0] : Double.NaN);
+	} // getXOrientationAngle
+
+	/**
+	 * This method returns the current Y-axis angle of the robot relative to a plane parallel to
+	 * the ground.
+	 *
+	 * <p>Values for the angle are in the range [-Pi, Pi].  The Y-axis is the wheel-to-wheel
+	 * axis.</p>
+	 *
+	 * @return	The Y-axis angle value in radians, with 0 meaning the Finch is level on the
+	 *			wheel-to-wheel axis, negative values meaning the left wheel is angled downward, and
+	 *			positive values meaning the left wheel is angled up.  If unable to connect, returns
+	 *			{@code NaN}.
+	 */
+	public double getYOrientationAngle() {
+		double[] angles = getOrientationAngles();
+		return ((angles != null) ? angles[1] : Double.NaN);
+	} // getYOrientationAngle
+
+	/**
+	 * Use this method to simultaneously return the current X and Y orientation angles experienced
+	 * by the robot.
+	 *
+	 * <p>Values for the angles are in the range [-Pi, Pi].  When the robot is on a flat surface,
+	 * the X and Y angles should both be close to 0.</p>
+	 *
+	 * @return	an array of 2 doubles containing the X and Y orientation angle values.  For the
+	 *			X-axis, negative values mean the beak is angled downward, and positive values mean
+	 *			the beak is angled up.  For the Y-axis, negative values mean the left wheel is
+	 *			angled downward, and positive values mean the left wheel is angled up.  If unable to
+	 *			connect, returns {@code null}.
+	 */
+	public double[] getOrientationAngles() {
+		double[] accelerations = getAccelerations();
+		if (accelerations == null)
+			return null;
+
+		double xAccel = accelerations[0];
+		double yAccel = accelerations[1];
+		double zAccel = accelerations[2];
+
+		double xAngle = Math.atan2(-xAccel, zAccel);
+		double yAngle = Math.atan2(-yAccel, zAccel);
+
+		return new double[] { xAngle, yAngle };
+	} // getOrientationAngles
+
+	/**
+	 * This method returns {@code true} if the beak is up (Finch sitting on its tail), {@code false} otherwise
+	 * @return	{@code true} if beak is pointed at ceiling
 	 */
 	public boolean isBeakUp() {
 		return "Beak Up".equals(getOrientation());
 	} // isBeakUp
 
 	/**
-	 * This method returns true if the beak is pointed at the floor, false otherwise
-	 * @return	true if beak is pointed at the floor
+	 * This method returns {@code true} if the beak is pointed at the floor, {@code false} otherwise
+	 * @return	{@code true} if beak is pointed at the floor
 	 */
 	public boolean isBeakDown() {
 		return "Beak Down".equals(getOrientation());
 	} // isBeakDown
 
 	/**
-	 * This method returns true if the Finch is on a flat surface
-	 * @return	true if the Finch is level
+	 * This method returns {@code true} if the Finch is on a flat surface
+	 * @return	{@code true} if the Finch is level
 	 */
 	public boolean isFinchLevel() {
 		return "Level".equals(getOrientation());
 	} // isFinchLevel
 
 	/**
-	 * This method returns true if the Finch is upside down, false otherwise
-	 * @return	true if Finch is upside down
+	 * This method returns {@code true} if the Finch is upside down, {@code false} otherwise
+	 * @return	{@code true} if Finch is upside down
 	 */
 	public boolean isFinchUpsideDown() {
 		return "Upside Down".equals(getOrientation());
 	} // isFinchUpsideDown
 
 	/**
-	 * This method returns true if the Finch's left wing is pointed at the ground
-	 * @return	true if Finch's left wing is down
+	 * This method returns {@code true} if the Finch's left wing is pointed at the ground
+	 * @return	{@code true} if Finch's left wing is down
 	 */
 	public boolean isLeftWingDown() {
 		return "Left Wing Down".equals(getOrientation());
 	} // isLeftWingDown
 
 	/**
-	 * This method returns true if the Finch's right wing is pointed at the ground
-	 * @return	true if Finch's right wing is down
+	 * This method returns {@code true} if the Finch's right wing is pointed at the ground
+	 * @return	{@code true} if Finch's right wing is down
 	 */
 	public boolean isRightWingDown() {
 		return "Right Wing Down".equals(getOrientation());
 	} // isRightWingDown
 
 	/**
-	 * Returns true if the Finch has been shaken since the last call to the method.
-	 * @return	true if the Finch was recently shaken
+	 * Returns {@code true} if the Finch has been shaken since the last call to the method.
+	 * @return	{@code true} if the Finch was recently shaken
 	 * @throws UnsupportedOperationException	Since the Bird Brain Robot Server doesn't currently
 	 *											provide support for this functionality.
 	 */
@@ -683,8 +745,8 @@ public class FinchHTTP {
 	} // isShaken
 
 	/**
-	 * Returns true if the Finch has been tapped since the last call to the method.
-	 * @return	true if the Finch was recently tapped
+	 * Returns {@code true} if the Finch has been tapped since the last call to the method.
+	 * @return	{@code true} if the Finch was recently tapped
 	 * @throws UnsupportedOperationException	Since the Bird Brain Robot Server doesn't currently
 	 *											provide support for this functionality.
 	 */
@@ -694,10 +756,11 @@ public class FinchHTTP {
 	} // isTapped
 
 	/**
-	 * Returns true if the temperature is less than the value specified by limit, false otherwise.
+	 * Returns {@code true} if the temperature is less than the value specified by limit,
+	 * {@code false} otherwise.
 	 *
 	 * @param	limit	The value the temperature needs to exceed in Celcius
-	 * @return	true if the temperature exceeds the value specified by limit
+	 * @return	{@code true} if the temperature exceeds the value specified by {@code limit}
 	 */
 	public boolean isTemperature(double limit) {
 		// TODO: The javadoc on finchrobot.com is contradictory about what this function returns.
@@ -708,10 +771,12 @@ public class FinchHTTP {
 
 	/**
 	 * The current temperature reading at the temperature probe.
-	 * The value returned is in Celsius.
-	 * To get Fahrenheit from Celsius, multiply the number by 1.8 and then add 32.
+	 *
+	 * <p>The value returned is in Celsius.  To get Fahrenheit from Celsius, multiply the number by
+	 * 1.8 and then add 32.</p>
 	 *
 	 * @return	The current temperature in degrees Celsius
+	 * @see #getTemperatureFahrenheit()
 	 */
 	public double getTemperature() {
 		try {
@@ -728,6 +793,7 @@ public class FinchHTTP {
 	/**
 	 * The current temperature reading at the temperature probe, in Fahrenheit.
 	 * @return	The current temperature in degrees Fahrenheit
+	 * @see #getTemperature()
 	 */
 	public double getTemperatureFahrenheit() {
 		return getTemperature() * 1.8 + 32;
@@ -747,6 +813,7 @@ public class FinchHTTP {
 		boolean[] obstacles = getObstacleSensors();
 		double[] accelerations = getAccelerations();
 		double temperature = getTemperature();
+		double[] angles = getOrientationAngles();
 
 		return "Finch Connected at "+ getServerBaseURL() +":"+
 				(!connected ? "" :
@@ -754,6 +821,9 @@ public class FinchHTTP {
 					"  Light:        left="+ lights[0] +" right="+ lights[1] +"\n"+
 					"  Obstacle:     left="+ obstacles[0] +" right="+ obstacles[1] +"\n"+
 					"  Acceleration: X="+ accelerations[0] +" Y="+ accelerations[1] +" Z="+ accelerations[2] +"\n"+
+					"  Orientation:  "+ getOrientation() + "\n" +
+					"      Angle X:  "+ angles[0] +" radians ("+ (angles[0] / Math.PI * 180) +" degrees)\n" +
+					"      Angle Y:  "+ angles[1] +" radians ("+ (angles[1] / Math.PI * 180) +" degrees)\n" +
 					"  Temperature:  "+ temperature +" C ("+ (temperature * 1.8 + 32) +" F)"
 				);
 	} // getStatusReport
