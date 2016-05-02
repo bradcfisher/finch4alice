@@ -103,7 +103,7 @@
 			</singlefile>
 
 			<singlefile src="../src/main/resources/Alice 3.vmoptions.linux" target="$INSTALL_PATH/Alice 3.vmoptions">
-				<os family="linux"/>
+				<os family="unix"/>
 				<os family="mac"/>
 			</singlefile>
 		</pack>
@@ -112,7 +112,7 @@
 	<natives>
 		<native type="izpack" name="ShellLink.dll"/>
 		<native type="izpack" name="ShellLink_x64.dll"/>
-		<native type="3rdparty" name="COIOSHelper.dll" stage="both">
+		<native type="3rdparty" name="COIOSHelper.dll" uninstaller="true">
 			<os family="windows"/>
 		</native>
 	</natives>
