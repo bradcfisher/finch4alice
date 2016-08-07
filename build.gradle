@@ -3,11 +3,11 @@ plugins {
 	id "java"
 	id "com.bmuschko.izpack" version "2.1"	// For building cross-platform installer
 	id "org.ajoberstar.github-pages" version "1.4.2"
-	id 'edu.sc.seis.launch4j' version '1.6.1'
-	id 'com.github.ben-manes.versions' version '0.12.0'
+	id 'edu.sc.seis.launch4j' version '1.6.2'
+	id 'com.github.ben-manes.versions' version '0.13.0'
 }
 
-version = "0.2-SNAPSHOT"
+version = "0.3-SNAPSHOT"
 ext.title = "Finch 4 Alice"
 description = "Enhances Alice 3.2 STransport subclasses to include methods for interacting with the Finch robot"
 
@@ -16,13 +16,10 @@ description = "Enhances Alice 3.2 STransport subclasses to include methods for i
 detectAliceDir()
 
 repositories {
-	// Use 'jcenter' for resolving your dependencies.
-	// You can declare any Maven/Ivy/file repository here.
 	jcenter()
-
-	//mavenCentral()
 	
 	maven {
+		// For IcePDF distributions
 		name "Ice Maven Release Repository"
 		url "http://anonsvn.icesoft.org/repo/maven2/releases" 
 	}
@@ -130,7 +127,7 @@ dependencies {
 
 	// Building izpack installer requires this
 	// It provides the underlying Ant plugin and compiler used to build the installer, among other things
-	izpack 'org.codehaus.izpack:izpack-ant:5.0.8'
+	izpack 'org.codehaus.izpack:izpack-ant:5.0.9'
 
 }
 

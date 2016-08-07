@@ -6,6 +6,7 @@
 	<variables>
 		<variable name="DesktopShortcutCheckboxEnabled" value="false"/>
 		<variable name="TargetPanel.dir.windows" value="${APPLICATIONS_DEFAULT_ROOT}Alice 3"/>
+		<variable name="TargetPanel.dir.mac" value="${APPLICATIONS_DEFAULT_ROOT}Alice 3.app/Contents/Resources/app"/>
 		<variable name="TargetPanel.dir.unix" value="${APPLICATIONS_DEFAULT_ROOT}Alice3"/>
 	</variables>
 

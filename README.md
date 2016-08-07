@@ -57,7 +57,7 @@ This will automatically perform the steps described under [Manual installation](
 
 Because Alice is installed system-wide by default on Windows, you will need to ensure you started the command window as Administrator or the installation will likely fail due to lack of permissions.
 
-Under Linux, you should be able to run the install as a normal user, as long as Alice is installed in the default location under that user's home directory.  If it is installed in a system-wide location like `/bin`, `/usr/bin`, or `/usr/local/bin` you will need to run the command as root with `sudo`.
+Under Linux or Mac OS X, you should be able to run the install as a normal user, as long as Alice is installed in the default location under that user's home directory.  If it is installed in a system-wide location like `/bin`, `/usr/bin`, or `/usr/local/bin` you will need to run the command as root with `sudo`.
 
 #### Multi-platform installer
 
