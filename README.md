@@ -258,6 +258,19 @@ The new procedures and functions are listed below.  If you want the full details
 
 ---
 
+*Symptom*: On Mac OS X, the finch responds sluggishly or infrequently when the BirdBrain Robot Server is not the foreground application.
+
+*Cause*: This behavior is usaully the result of the "app nap" feature of Mac OS X, which pauses background applications to reduce power usage.  The app nap feature should be disabled for the BirdBrain Robot Server since it must maintain a continuous connection to the Finch, and the pauses introduced by app nap do not allow that.
+
+To disable app nap for the BirdBrain Robot Server:
+  - Open the Applications folder in Finder
+  - Select the BirdBrain Robot Server application
+  - Use Command-I or right-click and select Get Info to open the Info dialog
+  - Check "Prevent App Nap" and close the Info dialog
+
+---
+
+
 ## Debugging and Logging
 
 
