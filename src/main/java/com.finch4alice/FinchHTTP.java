@@ -37,12 +37,25 @@ import java.util.Arrays;
  *
  * @see <a href="https://github.com/BirdBrainTechnologies/BirdBrainRobotServer/">The BirdBrain Robot Server</a>
  */
-public class FinchHTTP {
+public class FinchHTTP
+	implements FinchSensorState
+{
 
 	/**
 	 * Private storage for the serverBaseURL property.
 	 */
 	private String _serverBaseURL;
+
+	/**
+	 * The last known time that the Finch was shaken.
+	 */
+	private long lastShakenTime = Long.MAX_VALUE;
+
+	/**
+	 * The last known time that the Finch was tapped.
+	 */
+	private long lastTappedTime = Long.MAX_VALUE;
+	
 
 	/**
 	 * Constructs a new FinchHTTP instance using the default server URL of "http://localhost:22179/".
@@ -223,7 +236,7 @@ public class FinchHTTP {
 	 * <p>Example:</p>
 	 * {@code myFinch.saySomething("My light sensor has a value of "+ lightSensor + " and temperature is " + tempInCelcius);}
 	 *
-	 * Note that this version of saySomething is non-blocking - so if you call two saySomethign
+	 * Note that this version of saySomething is non-blocking - so if you call two saySomething
 	 * methods in a row without an intervening sleep, you will only hear the second call (it will
 	 * over-write the first call). 
 	 *
@@ -318,32 +331,7 @@ public class FinchHTTP {
 	} // playClip
 
 	/**
-	 * Returns the value of the left light sensor. Valid values range from 0 to 255, with higher
-	 * values indicating more light is being detected by the sensor.
-	 *
-	 * @return	The current light level at the left light sensor
-	 */
-	public int getLeftLightSensor() {
-		int[] lights = getLightSensors();
-		return ((lights != null) ? lights[0] : 0);
-	} // getLeftLightSensor
-
-	/**
-	 * Returns the value of the right light sensor. Valid values range from 0 to 255, with higher
-	 * values indicating more light is being detected by the sensor.
-	 *
-	 * @return	The current light level at the right light sensor
-	 */
-	public int getRightLightSensor() {
-		int[] lights = getLightSensors();
-		return ((lights != null) ? lights[1] : 0);
-	} // getRightLightSensor
-
-	/**
-	 * Returns a 2 integer array containing the current values of both light sensors.
-	 * The left sensor is the 0th array element, and the right sensor is the 1st element.
-	 *
-	 * @return	A 2 int array containing both light sensor readings.
+	 * {@inheritDoc}
 	 */
 	public int[] getLightSensors() {
 		String[] lights = httpGET("finch/in/lights").split(" ");
@@ -362,56 +350,7 @@ public class FinchHTTP {
 	} // getLightSensors
 
 	/**
-	 * Returns {@code true} if the specified {@code limit} is less than the left light sensor value.
-	 *
-	 * @param	limit	The value the light sensor needs to exceed
-	 * @return	whether the light sensor exceeds the value specified by {@code limit}
-	 */
-	public boolean isLeftLightSensor(double limit) {
-		return (getLeftLightSensor() > limit);
-	} // isLeftLightSensor
-
-	/**
-	 * Returns {@code true} if the specified {@code limit} is less than the right light sensor value.
-	 *
-	 * @param	limit	The value the light sensor needs to exceed
-	 * @return	whether the light sensor exceeds the value specified by {@code limit}
-	 */
-	public boolean isRightLightSensor(double limit) {
-		return (getRightLightSensor() > limit);
-	} // isRightLightSensor
-
-	/**
-	 * Returns {@code true} if there is an obstruction in front of the left side of the robot.
-	 * @return	Whether an obstacle exists in front of the left side of the robot.
-	 */
-	public boolean isObstacleLeftSide() {
-		boolean[] obstacles = getObstacleSensors();
-		return (obstacles != null) && obstacles[0];
-	} // isObstacleLeftSide
-
-	/**
-	 * Returns {@code true} if there is an obstruction in front of the right side of the robot.
-	 * @return	Whether an obstacle exists in front of the right side of the robot.
-	 */
-	public boolean isObstacleRightSide() {
-		boolean[] obstacles = getObstacleSensors();
-		return (obstacles != null) && obstacles[1];
-	} // isObstacleRightSide
-
-	/**
-	 * Returns {@code true} if either left or right obstacle sensor detect an obstacle.
-	 * @return	Whether either obstacle sensor sees an obstacle.
-	 */
-	public boolean isObstacle() {
-		boolean[] obstacles = getObstacleSensors();
-		return (obstacles != null) && (obstacles[0] || obstacles[1]);
-	} // isObstacle
-
-	/**
-	 * Returns the value of both obstacle sensors as 2 element boolean array. The left sensor is
-	 * the 0th element, and the right sensor is the 1st element.
-	 * @return	The values of left and right obstacle sensors in a 2 element array
+	 * {@inheritDoc}
 	 */
 	public boolean[] getObstacleSensors() {
 		String[] obstacles = httpGET("finch/in/obstacles").split(" ");
@@ -546,54 +485,7 @@ public class FinchHTTP {
 	} // setLED
 
 	/**
-	 * This method returns the current X-axis acceleration value experienced by the robot.
-	 *
-	 * <p>Values for acceleration range from -1.5 to +1.5g. The X-axis is the beak-tail axis, with
-	 * positive values indicating acceleration in the direction of the beak.</p>
-	 *
-	 * @return	The X-axis acceleration value.  If unable to connect, returns {@code NaN}.
-	 */
-	public double getXAcceleration() {
-		double[] accelerations = getAccelerations();
-		return ((accelerations != null) ? accelerations[0] : Double.NaN);
-	} // getXAcceleration
-
-	/**
-	 * This method returns the current Y-axis acceleration value experienced by the robot.
-	 *
-	 * <p>Values for acceleration range from -1.5 to +1.5g. The Y-axis is the wheel-to-wheel axis,
-	 * with positive values indicating acceleration in the direction of the right wheel.</p>
-	 *
-	 * @return	The Y-axis acceleration value.  If unable to connect, returns {@code NaN}.
-	 */
-	public double getYAcceleration() {
-		double[] accelerations = getAccelerations();
-		return ((accelerations != null) ? accelerations[1] : Double.NaN);
-	} // getYAcceleration
-
-	/**
-	 * This method returns the current Z-axis acceleration value experienced by the robot.
-	 *
-	 * <p>Values for acceleration range from -1.5 to +1.5g. The Z-axis runs perpendicular to the
-	 * Finch's circuit board, with positive values indicating acceleration toward the bottom of the
-	 * Finch.</p>
-	 *
-	 * @return	The Z-axis acceleration value.  If unable to connect, returns {@code NaN}.
-	 */
-	public double getZAcceleration() {
-		double[] accelerations = getAccelerations();
-		return ((accelerations != null) ? accelerations[2] : Double.NaN);
-	} // getZAcceleration
-
-	/**
-	 * Use this method to simultaneously return the current X, Y, and Z accelerations experienced
-	 * by the robot.
-	 *
-	 * <p>Values for acceleration can be in the range of -1.5g to +1.5g. When the robot is on a flat
-	 * surface, X and Y should be close to 0g, and Z should be near +1.0g.</p>
-	 *
-	 * @return	an array of 3 doubles containing the X, Y, and Z acceleration values.  If unable to
-	 *			connect, returns {@code null}.
+	 * {@inheritDoc}
 	 */
 	public double[] getAccelerations() {
 		String[] accelerations = httpGET("finch/in/accelerations").split(" ");
@@ -612,11 +504,7 @@ public class FinchHTTP {
 	} // getAccelerations
 
 	/**
-	 * Returns the current orientation of the Finch.
-	 * @return	When connected to a Finch, returns one of: {@code "Level"}, {@code "Upside Down"},
-	 *			{@code "Beak Up"}, {@code "Beak Down"}, {@code "Left Wing Down"},
-	 *			{@code "Right Wing Down"}, {@code "In Between"}.  If unable to connect, returns
-	 *			{@code null}.
+	 * {@inheritDoc}
 	 */
 	public String getOrientation() {
 		String result = httpGET("finch/in/orientation");
@@ -626,157 +514,49 @@ public class FinchHTTP {
 	} // getOrientation
 
 	/**
-	 * This method returns the current X-axis angle of the robot relative to a plane parallel to
-	 * the ground.
-	 *
-	 * <p>Values for the angle are in the range [-Pi, Pi].  The X-axis is the beak-tail axis.</p>
-	 *
-	 * @return	The X-axis angle value in radians, with 0 meaning the Finch is level on the
-	 *			beak-tail axis, negative values meaning the beak is angled downward, and positive
-	 *			values meaning the beak is angled up.  If unable to connect, returns {@code NaN}.
-	 */
-	public double getXOrientationAngle() {
-		double[] angles = getOrientationAngles();
-		return ((angles != null) ? angles[0] : Double.NaN);
-	} // getXOrientationAngle
-
-	/**
-	 * This method returns the current Y-axis angle of the robot relative to a plane parallel to
-	 * the ground.
-	 *
-	 * <p>Values for the angle are in the range [-Pi, Pi].  The Y-axis is the wheel-to-wheel
-	 * axis.</p>
-	 *
-	 * @return	The Y-axis angle value in radians, with 0 meaning the Finch is level on the
-	 *			wheel-to-wheel axis, negative values meaning the left wheel is angled downward, and
-	 *			positive values meaning the left wheel is angled up.  If unable to connect, returns
-	 *			{@code NaN}.
-	 */
-	public double getYOrientationAngle() {
-		double[] angles = getOrientationAngles();
-		return ((angles != null) ? angles[1] : Double.NaN);
-	} // getYOrientationAngle
-
-	/**
-	 * Use this method to simultaneously return the current X and Y orientation angles experienced
-	 * by the robot.
-	 *
-	 * <p>Values for the angles are in the range [-Pi, Pi].  When the robot is on a flat surface,
-	 * the X and Y angles should both be close to 0.</p>
-	 *
-	 * @return	an array of 2 doubles containing the X and Y orientation angle values.  For the
-	 *			X-axis, negative values mean the beak is angled downward, and positive values mean
-	 *			the beak is angled up.  For the Y-axis, negative values mean the left wheel is
-	 *			angled downward, and positive values mean the left wheel is angled up.  If unable to
-	 *			connect, returns {@code null}.
-	 */
-	public double[] getOrientationAngles() {
-		double[] accelerations = getAccelerations();
-		if (accelerations == null)
-			return null;
-
-		double xAccel = accelerations[0];
-		double yAccel = accelerations[1];
-		double zAccel = accelerations[2];
-
-		double xAngle = Math.atan2(-xAccel, zAccel);
-		double yAngle = Math.atan2(-yAccel, zAccel);
-
-		return new double[] { xAngle, yAngle };
-	} // getOrientationAngles
-
-	/**
-	 * This method returns {@code true} if the beak is up (Finch sitting on its tail), {@code false} otherwise
-	 * @return	{@code true} if beak is pointed at ceiling
-	 */
-	public boolean isBeakUp() {
-		return "Beak Up".equals(getOrientation());
-	} // isBeakUp
-
-	/**
-	 * This method returns {@code true} if the beak is pointed at the floor, {@code false} otherwise
-	 * @return	{@code true} if beak is pointed at the floor
-	 */
-	public boolean isBeakDown() {
-		return "Beak Down".equals(getOrientation());
-	} // isBeakDown
-
-	/**
-	 * This method returns {@code true} if the Finch is on a flat surface
-	 * @return	{@code true} if the Finch is level
-	 */
-	public boolean isFinchLevel() {
-		return "Level".equals(getOrientation());
-	} // isFinchLevel
-
-	/**
-	 * This method returns {@code true} if the Finch is upside down, {@code false} otherwise
-	 * @return	{@code true} if Finch is upside down
-	 */
-	public boolean isFinchUpsideDown() {
-		return "Upside Down".equals(getOrientation());
-	} // isFinchUpsideDown
-
-	/**
-	 * This method returns {@code true} if the Finch's left wing is pointed at the ground
-	 * @return	{@code true} if Finch's left wing is down
-	 */
-	public boolean isLeftWingDown() {
-		return "Left Wing Down".equals(getOrientation());
-	} // isLeftWingDown
-
-	/**
-	 * This method returns {@code true} if the Finch's right wing is pointed at the ground
-	 * @return	{@code true} if Finch's right wing is down
-	 */
-	public boolean isRightWingDown() {
-		return "Right Wing Down".equals(getOrientation());
-	} // isRightWingDown
-
-	/**
 	 * Returns {@code true} if the Finch has been shaken since the last call to the method.
-	 * @return	{@code true} if the Finch was recently shaken
-	 * @throws UnsupportedOperationException	Since the Bird Brain Robot Server doesn't currently
-	 *											provide support for this functionality.
+	 * @return	{@code true} if the Finch is connected and was recently shaken
 	 */
 	public boolean isShaken() {
-		// TODO: NOT IMPLEMENTED: The Bird Brain Robot Server doesn't currently support this property.
-		throw new UnsupportedOperationException("isShaken is not implemented");
+		String timeStr = httpGET("finch/in/lastShakenTime");
+		long time;
+		try {
+			time = Long.parseLong(timeStr);
+		} catch (NumberFormatException e) {
+			// Unparseable result, likely "null" or an error
+			throw new RuntimeException("Server returned invalid response (NumberFormatException)");
+		}
+
+		boolean shaken = (time > lastShakenTime);
+
+		lastShakenTime = time;
+
+		return shaken;
 	} // isShaken
 
 	/**
 	 * Returns {@code true} if the Finch has been tapped since the last call to the method.
-	 * @return	{@code true} if the Finch was recently tapped
-	 * @throws UnsupportedOperationException	Since the Bird Brain Robot Server doesn't currently
-	 *											provide support for this functionality.
+	 * @return	{@code true} if the Finch is connected and was recently tapped
 	 */
 	public boolean isTapped() {
-		// TODO: NOT IMPLEMENTED: The Bird Brain Robot Server doesn't currently support this property.
-		throw new UnsupportedOperationException("isTapped is not implemented");
+		String timeStr = httpGET("finch/in/lastTappedTime");
+		long time;
+		try {
+			time = Long.parseLong(timeStr);
+		} catch (NumberFormatException e) {
+			// Unparseable result, likely "null" or an error
+			throw new RuntimeException("Server returned invalid response (NumberFormatException)");
+		}
+
+		boolean tapped = (time > lastTappedTime);
+
+		lastTappedTime = time;
+
+		return tapped;
 	} // isTapped
 
 	/**
-	 * Returns {@code true} if the temperature is less than the value specified by limit,
-	 * {@code false} otherwise.
-	 *
-	 * @param	limit	The value the temperature needs to exceed in Celcius
-	 * @return	{@code true} if the temperature exceeds the value specified by {@code limit}
-	 */
-	public boolean isTemperature(double limit) {
-		// TODO: The javadoc on finchrobot.com is contradictory about what this function returns.
-		//		Need to review source to determine actual behavior (eg. return true if > limit or
-		//		if < limit?)
-		return (getTemperature() > limit);
-	} // isTemperature
-
-	/**
-	 * The current temperature reading at the temperature probe.
-	 *
-	 * <p>The value returned is in Celsius.  To get Fahrenheit from Celsius, multiply the number by
-	 * 1.8 and then add 32.</p>
-	 *
-	 * @return	The current temperature in degrees Celsius
-	 * @see #getTemperatureFahrenheit()
+	 * {@inheritDoc}
 	 */
 	public double getTemperature() {
 		try {
@@ -790,14 +570,102 @@ public class FinchHTTP {
 		}
 	} // getTemperature
 
+	private static class FinchState
+		implements FinchSensorState
+	{
+		private double temperature;
+		private int[] lightSensors;
+		private boolean[] obstacles;
+		private double[] accelerations;
+		private String orientation;
+
+		public double getTemperature() { return temperature; }
+		public int[] getLightSensors() { return lightSensors; }
+		public boolean[] getObstacleSensors() { return obstacles; }
+		public double[] getAccelerations() { return accelerations; }
+		public String getOrientation() { return orientation; }
+
+		public FinchState(
+			double temperature, int[] lightSensors, boolean[] obstacles,
+			String orientation, double[] accelerations
+		) {
+			this.temperature = temperature;
+			this.lightSensors = lightSensors;
+			this.obstacles = obstacles;
+			this.orientation = orientation;
+			this.accelerations = accelerations;
+		} // FinchState
+
+	} // class FinchState
+
 	/**
-	 * The current temperature reading at the temperature probe, in Fahrenheit.
-	 * @return	The current temperature in degrees Fahrenheit
-	 * @see #getTemperature()
+	 * Polls all of the Finch sensor data in one request to the server.
+	 * @return	A FinchSensorState instance containing the sensor readings, or null if not connected.
 	 */
-	public double getTemperatureFahrenheit() {
-		return getTemperature() * 1.8 + 32;
-	} // getTemperatureFahrenheit
+	public FinchSensorState poll() {
+		String result = httpGET("poll");
+
+		if (result == null || "null".equals(result))
+			return null;
+
+		if (result.startsWith("_problem ")) {
+			// Some sort of problem occurred
+			String message = result.substring("_problem ".length());
+
+			// TODO: Should we throw an exception or provide a way to read the problem message?
+
+			return null;
+		}
+
+		double temperature = 0;
+		int[] lightSensors = new int[2];
+		boolean[] obstacles = new boolean[2];
+		String orientation = "";
+		double[] accelerations = new double[3];
+
+		String[] lines = result.split("(?:\r\n|\n|\r)+");
+		for (String line : lines) {
+			String[] pieces = line.split("\\s+");
+			switch (pieces[0]) {
+			case "temperature":
+				temperature = Double.parseDouble(pieces[1]);
+				break;
+			case "leftLight":
+				lightSensors[0] = (int)(Double.parseDouble(pieces[1]) * 2.55);
+				break;
+			case "rightLight":
+				lightSensors[1] = (int)(Double.parseDouble(pieces[1]) * 2.55);
+				break;
+			case "leftObstacle":
+				obstacles[0] = "true".equals(pieces[1]);
+				break;
+			case "rightObstacle":
+				obstacles[1] = "true".equals(pieces[1]);
+				break;
+			case "orientation":
+				orientation = pieces[1].replace('_', ' ');
+				break;
+			case "XAcceleration":
+				accelerations[0] = Double.parseDouble(pieces[1]);
+				break;
+			case "YAcceleration":
+				accelerations[1] = Double.parseDouble(pieces[1]);
+				break;
+			case "ZAcceleration":
+				accelerations[2] = Double.parseDouble(pieces[1]);
+				break;
+			}
+		} // for
+
+		return new FinchState(temperature, lightSensors, obstacles, orientation, accelerations);
+	} // poll
+
+	/**
+	 * Turns off all motors, servos, and LEDs on the connected Finch.
+	 */
+	public void reset() {
+		httpGET("reset_all");
+	} // reset()
 
 	/**
 	 * Retrieves a brief status report string containing the current status of the Finch.
@@ -809,23 +677,7 @@ public class FinchHTTP {
 		if (!connected)
 			return "Finch NOT CONNECTED at "+ getServerBaseURL();
 
-		int[] lights = getLightSensors();
-		boolean[] obstacles = getObstacleSensors();
-		double[] accelerations = getAccelerations();
-		double temperature = getTemperature();
-		double[] angles = getOrientationAngles();
-
-		return "Finch Connected at "+ getServerBaseURL() +":"+
-				(!connected ? "" :
-					"\nSensors:\n"+
-					"  Light:        left="+ lights[0] +" right="+ lights[1] +"\n"+
-					"  Obstacle:     left="+ obstacles[0] +" right="+ obstacles[1] +"\n"+
-					"  Acceleration: X="+ accelerations[0] +" Y="+ accelerations[1] +" Z="+ accelerations[2] +"\n"+
-					"  Orientation:  "+ getOrientation() + "\n" +
-					"      Angle X:  "+ angles[0] +" radians ("+ (angles[0] / Math.PI * 180) +" degrees)\n" +
-					"      Angle Y:  "+ angles[1] +" radians ("+ (angles[1] / Math.PI * 180) +" degrees)\n" +
-					"  Temperature:  "+ temperature +" C ("+ (temperature * 1.8 + 32) +" F)"
-				);
+		return "Finch Connected at "+ getServerBaseURL() +":\n"+ FinchSensorState.super.getStatusReport();
 	} // getStatusReport
 
 } // FinchHTTP

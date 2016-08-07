@@ -40,10 +40,13 @@
 					</condition>
 				</condition>
 				<condition type="and">
-					<condition type="or">
-						<condition type="ref" refid="izpack.macinstall"/>
-						<condition type="ref" refid="izpack.linuxinstall"/>
+					<condition type="ref" refid="izpack.macinstall"/>
+					<condition type="exists">
+						<file>${INSTALL_PATH}/application</file>
 					</condition>
+				</condition>
+				<condition type="and">
+					<condition type="ref" refid="izpack.linuxinstall"/>
 					<condition type="exists">
 						<file>${INSTALL_PATH}/Alice3</file>
 					</condition>
@@ -104,6 +107,9 @@
 
 			<singlefile src="../src/main/resources/Alice 3.vmoptions.linux" target="$INSTALL_PATH/Alice 3.vmoptions">
 				<os family="unix"/>
+			</singlefile>
+
+			<singlefile src="../src/main/resources/Alice 3.vmoptions.linux" target="$INSTALL_PATH/../../vmoptions.txt">
 				<os family="mac"/>
 			</singlefile>
 		</pack>

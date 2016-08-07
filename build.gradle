@@ -41,7 +41,7 @@ tasks.withType(JavaCompile) {
  * Otherwise, the following OS-specific defaults will be used:
  *   Windows: C:\Program Files\Alice 3
  *   Linux: ~/Alice3
- *   Mac OSX: ~/Alice3
+ *   Mac OSX: /Applications/Alice 3.app/Contents/Resources/app
  */
 void detectAliceDir() {
 	def rv = null
@@ -52,7 +52,7 @@ void detectAliceDir() {
 		if (os.isWindows()) {
 			rv = "C:\\Program Files\\Alice 3"
 		} else if (os.isMacOsX()) {
-			rv = System.getProperty("user.home") +"/Alice3"
+			rv = "/Applications/Alice 3.app/Contents/Resources/app"
 		} else if (os.isUnix()) {
 			rv = System.getProperty("user.home") +"/Alice3"
 		}
@@ -222,22 +222,37 @@ task install(dependsOn: jar) {
 	// will already have files in them, those checks are expensive and waste a lot of time during
 	// the install.
 	doLast {
+		def os = org.gradle.internal.os.OperatingSystem.current()
+
 		def optionsFile =
 			"Alice 3.vmoptions."+
-				(org.gradle.internal.os.OperatingSystem.current().isWindows() ? "windows" : "linux")
+				(os.isWindows() ? "windows" : "linux")
 
 		copy {
 			into aliceDir
 
-			from("src/main/resources") {
-				include optionsFile
-				rename ".*", "Alice 3.vmoptions"
+			if (!os.isMacOsX()) {
+				from("src/main/resources") {
+					include optionsFile
+					rename ".*", "Alice 3.vmoptions"
+				}
 			}
 
 			from("${buildDir.name}/libs") {
 				into "ext/finch4alice"
 				include "finch4alice-*.jar"
 				rename ".*", "finch4alice.jar"
+			}
+		}
+
+		if (os.isMacOsX()) {
+			copy {
+				into aliceDir +"/../.."
+
+				from("src/main/resources") {
+					include optionsFile
+					rename ".*", "vmoptions.txt"
+				}
 			}
 		}
 	}
