@@ -3,13 +3,34 @@
 
 Ever wanted to control your [Finch robot](http://www.finchrobot.com/) from within [Alice 3](http://www.alice.org/)?  Well, now you can!
 
-Finch 4 Alice provides a simple extension to Alice 3 that adds methods for controlling a Finch robot to all Transport subclass instances.
+Finch 4 Alice provides a simple extension to Alice 3 that adds methods for controlling a Finch robot to all Transport subclass instances.  Cross-platform support is provided out-of-box for Microsoft Windows, Apple Macintosh OS X, and Linux operating systems.
 
-## Building
+# Contents
 
-You can build the Jar only for manual installation, build and install directly, or create an interactive multi-platform installer.
+* [Installation and Building the Project](#installation-and-building-the-project)
+  * [Build Prerequisites](#build-prerequisites)
+    * [Alice 3](#Alice-3)
+    * [JDK](#JDK)
+  * [Installation](#installation)
+    * [Direct install](#direct-install)
+    * [Multi-platform installer](#multi-platform-installer)
+    * [Manual installation](#manual-installation)
+    * [Building the Jar file only](#building-the-jar-file-only)
+  * [Using Finch 4 Alice](#using-finch-4-alice)
+    * [Confirming installation](#confirming-installation)
+    * [Connecting to a Finch](#connecting-to-a-finch)
+      * [Prerequisites](#prerequisites)
+      * [Example project](#example-project)
+  * [How it works](#how-it-works)
+    * [Additions to the STransport API](#additions-to-the-stransport-api)
+  * [Troubleshooting FAQ](#troubleshooting-faq)
+  * [Contributing](#Contributing)
+  * [Bugs and Features Requests](#bugs-and-features-requests)
+  * [Disclaimers & License](#disclaimers-&-license)
 
-### Prerequisites
+## Installation and Building the Project
+
+### Build Prerequisites
 
 #### Alice 3
 
@@ -29,21 +50,9 @@ To download a copy of Alice for your environment, visit the [Alice website](http
 
 You must have the Java Development Kit (JDK) version 1.8 or newer installed and properly configured.  You can obtain a copy of the JDK [from Oracle](http://www.oracle.com/technetwork/java/javase/downloads/index.html), or from a distribution provided by your operating system vendor.  OpenJDK should work fine, if you don't feel like using the Oracle proprietary JDK.
 
-### Building the Jar file only
-
-If Alice 3 is installed in the default location, executing the following command from within the project folder will build the Jar file.
-
-```
-./gradlew jar
-```
-
-If Alice is installed in a non-standard path, you can specify the correct path by providing it via the `aliceDir` command-line property value as follows:
-
-```
-./gradlew jar -PaliceDir=/path/to/alice3
-```
-
 ### Installation
+
+Finch 4 Alice provides several installation options.  You can build and install the prject directly from the command line, create an interactive multi-platform installer to distribute and use on multiple machines, or you can build the Jar only for manual installation.
 
 #### Direct install
 
@@ -55,13 +64,13 @@ If you wish to install Finch 4 Alice on the build machine, it can be installed d
 
 This will automatically perform the steps described under [Manual installation](manual-installation).
 
-Because Alice is installed system-wide by default on Windows, you will need to ensure you started the command window as Administrator or the installation will likely fail due to lack of permissions.
+Because Alice is installed system-wide by default on Windows and Macintosh OS X, you will need to ensure you execute the command as Administrator (root on OS X) or the installation will likely fail due to lack of permissions.
 
-Under Linux or Mac OS X, you should be able to run the install as a normal user, as long as Alice is installed in the default location under that user's home directory.  If it is installed in a system-wide location like `/bin`, `/usr/bin`, or `/usr/local/bin` you will need to run the command as root with `sudo`.
+Under Linux, you should be able to run the install as a normal user, as long as Alice is installed in the default location under that user's home directory.  If it is installed in a system-wide location like `/bin`, `/usr/bin`, or `/usr/local/bin` you will need to run the command as root with `sudo`.
 
 #### Multi-platform installer
 
-This installer is the easiest to use for most end-users.  It provides an intuitive window-based installer that walks users through the installation process, doesn't require any special build tools, and will run on all of the supported platforms with a properly configured JRE.
+This installer is the easiest to use for most end-users who do not have access to command line tools like git and gradle.  It provides an intuitive graphical installer that walks users through the installation process, doesn't require any special build tools, and will run on all of the supported platforms with a properly configured JRE.
 
 ```
 ./gradlew izPackCreateInstaller
@@ -69,13 +78,15 @@ This installer is the easiest to use for most end-users.  It provides an intuiti
 
 Once generated, you can find the installer under `build/distributions/finch4alice-<version>-installer.jar`.
 
-The installer Jar can be executed using java:
+The installer Jar can be executed using the following command:
 
 ```
 java -jar finch4alice-<version>-installer.jar
 ```
 
-A Windows executable installer can also be created from the installer Jar:
+Depending on your operating system configuration, you may also have alternative launch options.  For example, on Mac OS X systems with the Oracle JDK installed, you can launch the installer jar directly from Finder by simply double-clicking on the icon.
+
+A native Microsoft Windows executable installer can also be created from the installer Jar with the following command:
 
 ```
 ./gradlew launch4j
@@ -101,7 +112,7 @@ mkdir /path/to/alice/ext/finch4alice
 
 * Copy the generated Jar file `build/distributions/finch4alice-<version>.jar` into the Alice `ext/finch4alice` directory, and rename it to `finch4alice.jar`.
 ```
-cp ./build/finch4alice-0.1.jar /path/to/alice/ext/finch4alice/finch4alice.jar
+cp ./build/finch4alice-0.3.jar /path/to/alice/ext/finch4alice/finch4alice.jar
 ```
 
 * Create an Install4J vmoptions configuration file to instruct Alice to load the new Jar when it starts up.
@@ -115,9 +126,25 @@ cp "src/resources/Alice 3.vmoptions.linux" "/path/to/alice/Alice 3.vmoptions"
 cp "src/resources/Alice 3.vmoptions.linux" "/Applications/Alice 3.app/Contents/vmoptions.txt"
 ```
 
-Because Alice is installed system-wide by default on Windows, you will likely need to confirm a few UAC dialogs to copy and rename the files.
+Because Alice is installed system-wide by default on Windows, you must use an Administrator account and will likely need to confirm a few UAC dialogs to copy and rename the files.
+
+For Mac OS X, the commands will need to be executed by a user in the `admin` group, or as `root` (using sudo).
 
 Under Linux, you should be able to run the install as a normal user, as long as Alice is installed in the default location under that user's home directory.  If it is installed in a system-wide location like `/bin`, `/usr/bin`, or `/usr/local/bin` you will need to run the command as root with `sudo`.
+
+#### Building the Jar file only
+
+If Alice 3 is installed in the default location, executing the following command from within the project folder will build the Jar file.
+
+```
+./gradlew jar
+```
+
+If Alice is installed in a non-standard path, you can specify the correct path by providing it via the `aliceDir` command-line property value as follows:
+
+```
+./gradlew jar -PaliceDir=/path/to/alice3
+```
 
 ## Using Finch 4 Alice
 
@@ -167,6 +194,8 @@ Now that you have Finch 4 Alice installed, what can you do with it?  In this sec
 
 - Click `Setup Scene`
 
+xxx
+
 - Click `Transport classes`
 
 - Click `Watercraft classes`
@@ -190,7 +219,7 @@ Now that you have Finch 4 Alice installed, what can you do with it?  In this sec
 
 - You are now ready to try running your test project.  Click the `Run` button and you should see the LED in the nose of your Finch turn red for two seconds, then turn off.
 
-> More example projects can be found in the `examples` subfolder.
+> More example projects can be found in the [examples](examples) subfolder.
 
 ## How it works
 
@@ -206,49 +235,7 @@ One may wonder "Why not add a new type of object within Alice to represent a Fin
 
 Finch 4 Alice works by extending the STransport parent class within Alice.  Several new procedures and functions are added that expose the full range of functionality provided by the Finch robot.
 
-The new procedures and functions are listed below.  If you want the full details, be sure to check out [the Javadoc API](https://bradcfisher.github.io/finch4alice/api/0.1/).
-
-#### Finch procedures
-
-`finchBuzz(int frequency, int duration)`
-
-`finchPlayRTTTL(String rtttl, double frequencyMultiplier, double durationMultiplier, boolean useComputerSpeakers)`
-
-`finchSetLED(int red, int green, int blue)`
-
-`finchSetWheelVelocities(int leftVelocity, int rightVelocity)`
-
-`finchStopWheels()`
-
-#### Finch functions
-
-`int[] finchGetLightSensors()`
-
-`int finchGetLeftLightSensor()`
-
-`int finchGetRightLightSensor()`
-
-`boolean finchIsLeftLightSensor(int limit)`
-
-`boolean finchIsRightLightSensor(int limit)`
-
-`double finchGetXAcceleration()`
-
-`double finchGetYAcceleration()`
-
-`double finchGetZAcceleration()`
-
-`boolean finchIsBeakDown()`
-
-`boolean finchIsBeakUp()`
-
-`boolean finchIsLevel()`
-
-`boolean finchIsUpsideDown()`
-
-`boolean finchIsLeftWingDown()`
-
-`boolean finchIsRightWingDown()`
+ Check out [the Javadoc API](https://bradcfisher.github.io/finch4alice/api/0.3/) for the full API details.
 
 ## Troubleshooting FAQ
 
@@ -267,15 +254,6 @@ To disable app nap for the BirdBrain Robot Server:
   - Select the BirdBrain Robot Server application
   - Use Command-I or right-click and select Get Info to open the Info dialog
   - Check "Prevent App Nap" and close the Info dialog
-
----
-
-
-## Debugging and Logging
-
-
-TODO: Add some details on debugging and logging here
-
 
 ## Contributing
 
