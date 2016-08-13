@@ -62,7 +62,7 @@ If you wish to install Finch 4 Alice on the build machine, it can be installed d
 ./gradlew install
 ```
 
-This will automatically perform the steps described under [Manual installation](manual-installation).
+This will automatically perform the steps described under [Manual installation](#manual-installation).
 
 Because Alice is installed system-wide by default on Windows and Macintosh OS X, you will need to ensure you execute the command as Administrator (root on OS X) or the installation will likely fail due to lack of permissions.
 
