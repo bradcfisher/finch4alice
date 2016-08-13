@@ -29,24 +29,78 @@
       <div class="inner clearfix">
         <section id="main-content">
           <h1>
-<a id="finch-4-alice" class="anchor" href="#finch-4-alice" aria-hidden="true"><span class="octicon octicon-link"></span></a>Finch 4 Alice</h1>
+<a id="finch-4-alice" class="anchor" href="#finch-4-alice" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Finch 4 Alice</h1>
 
 <p>Ever wanted to control your <a href="http://www.finchrobot.com/">Finch robot</a> from within <a href="http://www.alice.org/">Alice 3</a>?  Well, now you can!</p>
 
-<p>Finch 4 Alice provides a simple extension to Alice 3 that adds methods for controlling a Finch robot to all Transport subclass instances.</p>
+<p>Finch 4 Alice provides a simple extension to Alice 3 that adds methods for controlling a Finch robot to all Transport subclass instances.  Cross-platform support is provided out-of-box for Microsoft Windows, Apple Macintosh OS X, and Linux operating systems.</p>
+
+<h1>
+<a id="contents" class="anchor" href="#contents" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contents</h1>
+
+<ul>
+<li>
+<a href="#installation-and-building-the-project">Installation and Building the Project</a>
+
+<ul>
+<li>
+<a href="#build-prerequisites">Build Prerequisites</a>
+
+<ul>
+<li><a href="#alice-3">Alice 3</a></li>
+<li><a href="#jdk">JDK</a></li>
+</ul>
+</li>
+<li>
+<a href="#installation">Installation</a>
+
+<ul>
+<li><a href="#direct-install">Direct install</a></li>
+<li><a href="#multi-platform-installer">Multi-platform installer</a></li>
+<li><a href="#manual-installation">Manual installation</a></li>
+<li><a href="#building-the-jar-file-only">Building the Jar file only</a></li>
+</ul>
+</li>
+<li>
+<a href="#using-finch-4-alice">Using Finch 4 Alice</a>
+
+<ul>
+<li><a href="#confirming-installation">Confirming installation</a></li>
+<li>
+<a href="#connecting-to-a-finch">Connecting to a Finch</a>
+
+<ul>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#example-project">Example project</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="#how-it-works">How it works</a>
+
+<ul>
+<li><a href="#additions-to-the-stransport-api">Additions to the STransport API</a></li>
+</ul>
+</li>
+<li><a href="#troubleshooting-faq">Troubleshooting FAQ</a></li>
+<li><a href="#contributing">Contributing</a></li>
+<li><a href="#bugs-and-features-requests">Bugs and Features Requests</a></li>
+<li><a href="#disclaimers--license">Disclaimers &amp; License</a></li>
+</ul>
+</li>
+</ul>
 
 <h2>
-<a id="building" class="anchor" href="#building" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building</h2>
-
-<p>You can build the Jar only for manual installation, or create several types of installers.</p>
+<a id="installation-and-building-the-project" class="anchor" href="#installation-and-building-the-project" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation and Building the Project</h2>
 
 <h3>
-<a id="prerequisites" class="anchor" href="#prerequisites" aria-hidden="true"><span class="octicon octicon-link"></span></a>Prerequisites</h3>
+<a id="build-prerequisites" class="anchor" href="#build-prerequisites" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Build Prerequisites</h3>
 
 <h4>
-<a id="alice-3" class="anchor" href="#alice-3" aria-hidden="true"><span class="octicon octicon-link"></span></a>Alice 3</h4>
+<a id="alice-3" class="anchor" href="#alice-3" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alice 3</h4>
 
-<p>You must have an installation of Alice 3 on the build machine, preferrably installed in the default location.  This location varies by platform, as shown in the following table:</p>
+<p>You must have an installation of <a href="http://www.alice.org/">Alice 3</a> on the build machine, preferrably installed in the default location.  This location varies by platform, as shown in the following table:</p>
 
 <table>
 <thead>
@@ -62,215 +116,271 @@
 </tr>
 <tr>
 <td>Linux</td>
-<td>~/Alice3/lib</td>
+<td>~/Alice3</td>
 </tr>
 <tr>
 <td>Max OS X</td>
-<td>~/Alice3/lib</td>
+<td>/Applications/Alice 3.app/Contents/Resources/app</td>
 </tr>
 </tbody>
 </table>
 
-<h4>
-<a id="jdk" class="anchor" href="#jdk" aria-hidden="true"><span class="octicon octicon-link"></span></a>JDK</h4>
+<p>Finch 4 Alice has been tested against Alice version 3.2.5.0.0.  Previous versions used a different type of installer and are not compatible.</p>
 
-<p>You must have the Java Development Kit (JDK) version 1.7 or newer installed and properly configured.  You can obtain a copy of the JDK <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">from Oracle</a>, or from a distribution provided by your operating system vendor.  OpenJDK should work fine, if you don't feel like using the Oracle proprietary JDK.</p>
+<p>To download a copy of Alice for your environment, visit the <a href="http://www.alice.org/">Alice website</a>.</p>
+
+<h4>
+<a id="jdk" class="anchor" href="#jdk" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>JDK</h4>
+
+<p>You must have the Java Development Kit (JDK) version 1.8 or newer installed and properly configured.  You can obtain a copy of the JDK <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">from Oracle</a>, or from a distribution provided by your operating system vendor.  OpenJDK should work fine, if you don't feel like using the Oracle proprietary JDK.</p>
 
 <h3>
-<a id="building-the-jar-file-only" class="anchor" href="#building-the-jar-file-only" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building the Jar file only</h3>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h3>
+
+<p>Finch 4 Alice provides several installation options.  You can build and install the prject directly from the command line, create an interactive multi-platform installer to distribute and use on multiple machines, or you can build the Jar only for manual installation.</p>
+
+<h4>
+<a id="direct-install" class="anchor" href="#direct-install" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Direct install</h4>
+
+<p>If you wish to install Finch 4 Alice on the build machine, it can be installed directly by Gradle.  To accomplish this, execute the following command:</p>
+
+<pre><code>./gradlew install
+</code></pre>
+
+<p>This will automatically perform the steps described under <a href="manual-installation">Manual installation</a>.</p>
+
+<p>Because Alice is installed system-wide by default on Windows and Macintosh OS X, you will need to ensure you execute the command as Administrator (root on OS X) or the installation will likely fail due to lack of permissions.</p>
+
+<p>Under Linux, you should be able to run the install as a normal user, as long as Alice is installed in the default location under that user's home directory.  If it is installed in a system-wide location like <code>/bin</code>, <code>/usr/bin</code>, or <code>/usr/local/bin</code> you will need to run the command as root with <code>sudo</code>.</p>
+
+<h4>
+<a id="multi-platform-installer" class="anchor" href="#multi-platform-installer" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Multi-platform installer</h4>
+
+<p>This installer is the easiest to use for most end-users who do not have access to command line tools like git and gradle.  It provides an intuitive graphical installer that walks users through the installation process, doesn't require any special build tools, and will run on all of the supported platforms with a properly configured JRE.</p>
+
+<pre><code>./gradlew izPackCreateInstaller
+</code></pre>
+
+<p>Once generated, you can find the installer under <code>build/distributions/finch4alice-&lt;version&gt;-installer.jar</code>.</p>
+
+<p>The installer Jar can be executed using the following command:</p>
+
+<pre><code>java -jar finch4alice-&lt;version&gt;-installer.jar
+</code></pre>
+
+<p>Depending on your operating system configuration, you may also have alternative launch options.  For example, on Mac OS X systems with the Oracle JDK installed, you can launch the installer jar directly from Finder by simply double-clicking on the icon.</p>
+
+<p>A native Microsoft Windows executable installer can also be created from the installer Jar with the following command:</p>
+
+<pre><code>./gradlew launch4j
+</code></pre>
+
+<p>The generated EXE will be placed under <code>build/distributions/finch4alice-&lt;version&gt;-setup.exe</code>.</p>
+
+<h4>
+<a id="manual-installation" class="anchor" href="#manual-installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Manual installation</h4>
+
+<p>If for some reason the above options don't work for your particular situation, or you simply enjoy getting into the nitty gritty aspects of software hacking, then this is the section for you.</p>
+
+<p>To manually install Finch 4 Alice:</p>
+
+<ul>
+<li>First build the Jar as described above under <a href="#building-the-jar-file-only">Building the Jar file only</a>.</li>
+</ul>
+
+<pre><code>./gradlew jar
+</code></pre>
+
+<ul>
+<li>Create a new subdirectory under the Alice <code>ext</code> directory named <code>ext/finch4alice</code>.</li>
+</ul>
+
+<pre><code>mkdir /path/to/alice/ext/finch4alice
+</code></pre>
+
+<ul>
+<li>Copy the generated Jar file <code>build/distributions/finch4alice-&lt;version&gt;.jar</code> into the Alice <code>ext/finch4alice</code> directory, and rename it to <code>finch4alice.jar</code>.</li>
+</ul>
+
+<pre><code>cp ./build/finch4alice-0.3.jar /path/to/alice/ext/finch4alice/finch4alice.jar
+</code></pre>
+
+<ul>
+<li>Create an Install4J vmoptions configuration file to instruct Alice to load the new Jar when it starts up.
+
+<ul>
+<li>For Windows, copy the file <code>src/resources/Alice 3.vmoptions.windows</code> into the Alice main folder and rename it to <code>Alice 3.vmoptions</code>.</li>
+<li>For Linux, copy <code>src/resources/Alice 3.vmoptions.linux</code>:</li>
+</ul>
+</li>
+</ul>
+
+<pre><code>cp "src/resources/Alice 3.vmoptions.linux" "/path/to/alice/Alice 3.vmoptions"
+</code></pre>
+
+<ul>
+<li>For Mac OS X, copy <code>src/resources/Alice 3.vmoptions.linux</code>:</li>
+</ul>
+
+<pre><code>cp "src/resources/Alice 3.vmoptions.linux" "/Applications/Alice 3.app/Contents/vmoptions.txt"
+</code></pre>
+
+<p>Because Alice is installed system-wide by default on Windows, you must use an Administrator account and will likely need to confirm a few UAC dialogs to copy and rename the files.</p>
+
+<p>For Mac OS X, the commands will need to be executed by a user in the <code>admin</code> group, or as <code>root</code> (using sudo).</p>
+
+<p>Under Linux, you should be able to run the install as a normal user, as long as Alice is installed in the default location under that user's home directory.  If it is installed in a system-wide location like <code>/bin</code>, <code>/usr/bin</code>, or <code>/usr/local/bin</code> you will need to run the command as root with <code>sudo</code>.</p>
+
+<h4>
+<a id="building-the-jar-file-only" class="anchor" href="#building-the-jar-file-only" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Building the Jar file only</h4>
 
 <p>If Alice 3 is installed in the default location, executing the following command from within the project folder will build the Jar file.</p>
 
 <pre><code>./gradlew jar
 </code></pre>
 
-<p>If Alice is installed in a non-standard path, you can specify the correct path by providing it via the <code>aliceLibDir</code> command-line property value as follows:</p>
+<p>If Alice is installed in a non-standard path, you can specify the correct path by providing it via the <code>aliceDir</code> command-line property value as follows:</p>
 
-<pre><code>./gradlew jar -PaliceLibDir=/path/to/alice3/lib
-</code></pre>
-
-<h3>
-<a id="building-the-installers" class="anchor" href="#building-the-installers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building the installers</h3>
-
-<h4>
-<a id="multi-platform--windows" class="anchor" href="#multi-platform--windows" aria-hidden="true"><span class="octicon octicon-link"></span></a>Multi-platform / Windows</h4>
-
-<p>This type of installer is the easiest to use for most end-users.  It provides an intuitive window-based installer that walks users through the installation process, and will run on all of the supported platforms.</p>
-
-<pre><code>./gradlew izpack
-</code></pre>
-
-<h4>
-<a id="rpm-package" class="anchor" href="#rpm-package" aria-hidden="true"><span class="octicon octicon-link"></span></a>RPM package</h4>
-
-<p>Users of Redhat Enterprise Linux or Fedora Linux may prefer to use RPM to install.  To generate a suitable RPM package:</p>
-
-<pre><code>./gradlew buildRpm
-</code></pre>
-
-<p>The generated RPM can be found under <code>build/distributions/</code>.</p>
-
-<p>You can install the generated package using <code>rpm</code>, as shown below:</p>
-
-<pre><code>rpm -ivh build/distributions/finch4alice_0.1_noarch.rpm
-</code></pre>
-
-<p>OR, if you have already installed a previous version, use the upgrade command.  This is also safe to run if you haven't yet installed the package.</p>
-
-<pre><code>rpm -Uvh build/distributions/finch4alice_0.1_noarch.rpm
-</code></pre>
-
-<p>To install using <code>yum</code> and for distribution to multiple machines, it is recommended that you set up a local yum repository server.</p>
-
-<blockquote>
-<p>Note that the generated package will only install into the same folder structure as Alice is installed under on the build machine.  Since Alice is generally installed to each user's home directory, this type of packaging will generally not be the best option.  However, if you wish to install Alice in a system-wide configuration on multiple machines, this may be the route to go.</p>
-</blockquote>
-
-<h4>
-<a id="debian-deb-package" class="anchor" href="#debian-deb-package" aria-hidden="true"><span class="octicon octicon-link"></span></a>Debian (DEB) package</h4>
-
-<p>If you run a Debian-based system and prefer installing via <code>apt</code>, then this may be the installation type for you.  You can build a Debian package by running the following command:</p>
-
-<pre><code>./gradlew buildDeb
-</code></pre>
-
-<p>The generated DEB can be found under <code>build/distributions/</code>.</p>
-
-<p>You can install the generated package using <code>dpkg</code>, as shown below:</p>
-
-<pre><code>dpkg -i build/distributions/finch4alice_0.1_all.deb
-</code></pre>
-
-<p>To install using <code>apt</code> and for distribution to multiple machines, it is recommended that you set up a local apt cache repository.  One such option is to use <a href="https://mirrorer.alioth.debian.org/">reprepro</a>.</p>
-
-<blockquote>
-<p>As stated above for the RPM package, the generated Debian paclage will only install into the same folder structure as Alice is installed under on the build machine.  Since Alice is generally installed to each user's home directory, this type of packaging will generally not be the best option.  However, if you wish to install Alice in a system-wide configuration on multiple machines, this may be the route to go.</p>
-</blockquote>
-
-<h2>
-<a id="manual-installation" class="anchor" href="#manual-installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Manual installation</h2>
-
-<p>If for some reason the generated installers don't work for your particular situation, or you simply enjoy getting into the nitty gritty aspects of software hacking, then this is the section for you.</p>
-
-<p>To manually install Finch 4 Alice:</p>
-
-<ol>
-<li>First build the Jar as described above under <a href="#building-the-jar-file-only">Building the Jar file only</a>.</li>
-<li>Copy the generated Jar file from the build directory into the Alice <code>ext</code> directory</li>
-</ol>
-
-<pre><code>mkdir /path/to/alice/ext/finch4alice
-cp ./build/finch4alice-0.1.jar /path/to/alice/ext/finch4alice
-</code></pre>
-
-<ol>
-<li>Create an Install4J configuration to instruct Alice to load the new Jar.
-
-<ul>
-<li>For Windows, copy the file <code>src/resources/Alice 3.vmoptions.windows</code> into the Alice main folder and rename it to <code>Alice 3.vmoptions</code>.</li>
-<li>For Linux and Mac OS X:</li>
-</ul>
-</li>
-</ol>
-
-<pre><code>cp "src/resources/Alice 3.vmoptions.linux" "/path/to/alice/Alice 3.vmoptions"
+<pre><code>./gradlew jar -PaliceDir=/path/to/alice3
 </code></pre>
 
 <h2>
-<a id="using-finch-4-alice" class="anchor" href="#using-finch-4-alice" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using Finch 4 Alice</h2>
+<a id="using-finch-4-alice" class="anchor" href="#using-finch-4-alice" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using Finch 4 Alice</h2>
 
 <h3>
-<a id="confirming-installation" class="anchor" href="#confirming-installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Confirming installation</h3>
+<a id="confirming-installation" class="anchor" href="#confirming-installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Confirming installation</h3>
 
 <p>To ensure that everything is installed and configured properly:</p>
 
-<ol>
-<li>Launch Alice</li>
-<li>When prompted, create a new empty project (eg. select 'GRASS' from under the 'Blank Slates' tab)</li>
-</ol>
+<ul>
+<li><p>Launch Alice</p></li>
+<li><p>When prompted to load a project, simple close the dialog by clicking 'Cancel'.</p></li>
+</ul>
 
-<p>TODO: image here</p>
+<p><img src="images/readme/select_project_dialog.png" alt="Select Project Dialog" title="Click the 'Cancel' button to close this dialog"></p>
 
-<ol>
+<ul>
 <li>Select the <code>Help -&gt; Show System Properties</code> menu</li>
-</ol>
+</ul>
 
-<p>TODO: image here</p>
+<p><img src="images/readme/show_system_properties_menu.png" alt="Show System Properties Menu" title="The 'Show System Properties' menu"></p>
 
-<ol>
+<ul>
 <li>Click <code>Show...</code> to the right of <code>java.class.path</code>
 </li>
-</ol>
+</ul>
 
-<p>TODO: image here</p>
+<p><img src="images/readme/show_system_properties_dialog.png" alt="Show System Properties Dialog" title="The 'Show System Properties' dialog"></p>
 
-<ol>
+<ul>
 <li>Verify that the finch4alice jar is listed at the beginning of the class path.</li>
-</ol>
+</ul>
 
-<p>TODO: image here</p>
-
-<h3>
-<a id="connecting-to-a-finch" class="anchor" href="#connecting-to-a-finch" aria-hidden="true"><span class="octicon octicon-link"></span></a>Connecting to a Finch</h3>
-
-<p>TODO: Provide a simple example of how to interact with a connected Finch robot</p>
+<p><img src="images/readme/java_class_path_dialog.png" alt="System Property: java.class.path Dialog" title="The 'System Property: java.class.path' dialog"></p>
 
 <h3>
-<a id="additions-to-the-stransport-api" class="anchor" href="#additions-to-the-stransport-api" aria-hidden="true"><span class="octicon octicon-link"></span></a>Additions to the STransport API</h3>
+<a id="connecting-to-a-finch" class="anchor" href="#connecting-to-a-finch" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Connecting to a Finch</h3>
+
+<p>Now that you have Finch 4 Alice installed, what can you do with it?  In this section, we'll go through a simple example and "kick the tires", so to speak.</p>
+
+<h4>
+<a id="prerequisites" class="anchor" href="#prerequisites" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Prerequisites</h4>
+
+<ul>
+<li><p>You need an installation of Alice 3, with Finch 4 Alice installed.</p></li>
+<li><p>You need a Finch robot, properly connected to your computer.  If you don't happen to have a Finch, they can be purchased from the <a href="http://www.finchrobot.com/">Finch Robot website</a>.</p></li>
+<li><p>You will need to install the BirdBrain Robot Server.  You can find installers for various operating systems in the <a href="https://github.com/BirdBrainTechnologies/BirdBrainRobotServer/tree/master/Packages">BirdBrain Robot Server GitHub repository</a>.  Perhaps surprisingly, Finch 4 Alice doesn't actually communicate directly with a Finch robot.  It relies on the BirdBrain Robot Server to do that.  This simplifies the implementation and reduces the number of dependencies that would need to be patched into Alice.</p></li>
+</ul>
+
+<h4>
+<a id="example-project" class="anchor" href="#example-project" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example project</h4>
+
+<ul>
+<li>Start the BirdBrain Robot Server and connect your Finch robot.  The BirdBrain server window should look as follows when it detects a connected Finch:</li>
+</ul>
+
+<p><img src="images/readme/birdbrain_connected_finch.png" alt="The BirdBrain Robot Server with a connected Finch" title="The BirdBrain Robot Server with a connected Finch"></p>
+
+<ul>
+<li>Launch Alice and when prompted to select a project, create a new project based on the 'GRASS' theme.</li>
+</ul>
+
+<p><img src="images/readme/select_project_dialog.png" alt="Select Project Dialog" title="Select 'GRASS', then click the 'OK' button to create a new project"></p>
+
+<ul>
+<li><p>Click <code>Setup Scene</code></p></li>
+<li><p>Click <code>Transport classes</code></p></li>
+<li><p>Click <code>Watercraft classes</code></p></li>
+<li><p>Click <code>new FishingBoat()</code></p></li>
+<li><p>Click <code>Edit Code</code></p></li>
+<li><p>Drag the <code>finchSetLED</code> procedure from the pane on the left into the code window for 'myFirstMethod'</p></li>
+<li>Select <code>Custom Whole Number...</code>, then <code>0</code> for the second parameter and <code>0</code> for the third parameter.</li>
+<li><p>Enter <code>255</code> when prompted for the custom value for the first parameter.</p></li>
+<li><p>Drag the <code>delay</code> procedure into 'myFirstMethod'</p></li>
+<li><p>Select <code>2.0</code> for the number of seconds to delay</p></li>
+<li><p>Drag the <code>finchSetLED</code> procedure into 'myFirstMethod'</p></li>
+<li><p>Select <code>0</code> for all three parameters.</p></li>
+<li><p>Drag the <code>say</code> procedure into 'myFirstMethod'</p></li>
+<li><p>Select <code>Custom TextString...</code> and enter <code>All done</code> when prompted.</p></li>
+<li><p>You are now ready to try running your test project.  Click the <code>Run</code> button and you should see the LED in the nose of your Finch turn red for two seconds, then turn off.</p></li>
+</ul>
+
+<blockquote>
+<p>More example projects can be found in the <a href="examples">examples</a> subfolder.</p>
+</blockquote>
+
+<h2>
+<a id="how-it-works" class="anchor" href="#how-it-works" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How it works</h2>
+
+<p>Alice 3 doesn't directly provide an extension mechanism for adding additional functionality such as access to external libraries or jars from within the Alice editor itself.</p>
+
+<p>To work around this, Finch 4 Alice causes the Java runtime to load a custom Jar file into the class path before the other Alice classes are loaded.  Due to the way that the Java class loader works, classes found earlier in the class path will override classes of the same name that are found later (that is, a first-come-first-served policy).</p>
+
+<p>The Jar generated by Finch 4 Alice contains a replacement version of the <code>org.lgna.story.STransport</code> class within Alice which all "transport" objects (for example Automobile or Boat) are subclasses of.  Not counting inherited methods or properties, the implementation of that class within Alice itself is pretty minimal, consisting of a constructor and a single property.  That simplicity made it an ideal target for adding additional methods to.</p>
+
+<p>One may wonder "Why not add a new type of object within Alice to represent a Finch?"  In one word: Complexity.  Due to how the Alice code is currently structured, adding an additional object type that could be selected from within the UI would have had far-reaching implications in terms of the number of classes that would need to be patched.  In the interests of promoting <a href="https://en.wikipedia.org/wiki/Occam's_razor">Occam's razor</a> and the principle of simplicity, we chose to take a simpler route.  Specifically, it was easier to reason about what was needed to accomplish the task and get on with playing around with a Finch from within Alice :)</p>
+
+<h3>
+<a id="additions-to-the-stransport-api" class="anchor" href="#additions-to-the-stransport-api" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Additions to the STransport API</h3>
 
 <p>Finch 4 Alice works by extending the STransport parent class within Alice.  Several new procedures and functions are added that expose the full range of functionality provided by the Finch robot.</p>
 
-<h4>
-<a id="finch-procedures" class="anchor" href="#finch-procedures" aria-hidden="true"><span class="octicon octicon-link"></span></a>Finch procedures</h4>
-
-<p><code>finchBuzz(int frequency, int duration)</code></p>
-
-<p><code>finchPlayRTTTL(String rtttl, double frequencyMultiplier, double durationMultiplier, boolean useComputerSpeakers)</code></p>
-
-<p><code>finchSetLED(int red, int green, int blue)</code></p>
-
-<p><code>finchSetWheelVelocities(int leftVelocity, int rightVelocity)</code></p>
-
-<p><code>finchStopWheels()</code></p>
-
-<h4>
-<a id="finch-functions" class="anchor" href="#finch-functions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Finch functions</h4>
-
-<p><code>int[] finchGetLightSensors()</code></p>
-
-<p><code>int finchGetLeftLightSensor()</code></p>
-
-<p><code>int finchGetRightLightSensor()</code></p>
-
-<p><code>boolean finchIsLeftLightSensor(int limit)</code></p>
-
-<p><code>boolean finchIsRightLightSensor(int limit)</code></p>
-
-<p><code>double finchGetXAcceleration()</code></p>
-
-<p><code>double finchGetYAcceleration()</code></p>
-
-<p><code>double finchGetZAcceleration()</code></p>
-
-<p><code>boolean finchIsBeakDown()</code></p>
-
-<p><code>boolean finchIsBeakUp()</code></p>
-
-<p><code>boolean finchIsLevel()</code></p>
-
-<p><code>boolean finchIsUpsideDown()</code></p>
-
-<p><code>boolean finchIsLeftWingDown()</code></p>
-
-<p><code>boolean finchIsRightWingDown()</code></p>
-
-<h3>
-<a id="debugging-and-logging" class="anchor" href="#debugging-and-logging" aria-hidden="true"><span class="octicon octicon-link"></span></a>Debugging and Logging</h3>
-
-<p>TODO: Add some details on debugging and logging here</p>
+<p>Check out <a href="https://bradcfisher.github.io/finch4alice/api/0.3/">the Javadoc API</a> for the full API details.</p>
 
 <h2>
-<a id="disclaimers--license" class="anchor" href="#disclaimers--license" aria-hidden="true"><span class="octicon octicon-link"></span></a>Disclaimers &amp; License</h2>
+<a id="troubleshooting-faq" class="anchor" href="#troubleshooting-faq" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Troubleshooting FAQ</h2>
+
+<p><em>Symptom</em>: Alice raises an exception when one of the example projects is loaded.</p>
+
+<p><em>Cause</em>: This is most likely caused by trying to load a project into an installation of Alice that has not yet had Finch 4 Alice installed.  The example projects contain references to the new methods added by Finch 4 Alice, and exceptions are raised when those instructions are processed without the Finch 4 Alice code loaded.</p>
+
+<hr>
+
+<p><em>Symptom</em>: On Mac OS X, the finch responds sluggishly or infrequently when the BirdBrain Robot Server is not the foreground application.</p>
+
+<p><em>Cause</em>: This behavior is usaully the result of the "app nap" feature of Mac OS X, which pauses background applications to reduce power usage.  The app nap feature should be disabled for the BirdBrain Robot Server since it must maintain a continuous connection to the Finch, and the pauses introduced by app nap do not allow that.</p>
+
+<p>To disable app nap for the BirdBrain Robot Server:</p>
+
+<ul>
+<li>Open the Applications folder in Finder</li>
+<li>Select the BirdBrain Robot Server application</li>
+<li>Use Command-I or right-click and select Get Info to open the Info dialog</li>
+<li>Check "Prevent App Nap" and close the Info dialog</li>
+</ul>
+
+<h2>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributing</h2>
+
+<p>Contributions are very welcome and are accepted through pull requests.  Simply create a <a href="https://help.github.com/articles/fork-a-repo/">fork on GitHub</a>, commit and push your updates to your fork, and then <a href="https://help.github.com/articles/using-pull-requests/">submit a pull request</a> for review.</p>
+
+<h2>
+<a id="bugs-and-features-requests" class="anchor" href="#bugs-and-features-requests" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Bugs and Features Requests</h2>
+
+<p>Please submit all bug reports and feature requests to the project <a href="../../issues/">issue tracker</a>.</p>
+
+<h2>
+<a id="disclaimers--license" class="anchor" href="#disclaimers--license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Disclaimers &amp; License</h2>
 
 <p>The Finch 4 Alice project is not affiliated with either the Finch or Alice 3 projects or their respective intellectual property holders.</p>
 
