@@ -9,8 +9,8 @@ Finch 4 Alice provides a simple extension to Alice 3 that adds methods for contr
 
 * [Installation and Building the Project](#installation-and-building-the-project)
   * [Build Prerequisites](#build-prerequisites)
-    * [Alice 3](#Alice-3)
-    * [JDK](#JDK)
+    * [Alice 3](#alice-3)
+    * [JDK](#jdk)
   * [Installation](#installation)
     * [Direct install](#direct-install)
     * [Multi-platform installer](#multi-platform-installer)
@@ -24,9 +24,9 @@ Finch 4 Alice provides a simple extension to Alice 3 that adds methods for contr
   * [How it works](#how-it-works)
     * [Additions to the STransport API](#additions-to-the-stransport-api)
   * [Troubleshooting FAQ](#troubleshooting-faq)
-  * [Contributing](#Contributing)
+  * [Contributing](#contributing)
   * [Bugs and Features Requests](#bugs-and-features-requests)
-  * [Disclaimers & License](#disclaimers-&-license)
+  * [Disclaimers & License](#disclaimers--license)
 
 ## Installation and Building the Project
 
@@ -193,8 +193,6 @@ Now that you have Finch 4 Alice installed, what can you do with it?  In this sec
 ![Select Project Dialog](images/readme/select_project_dialog.png "Select 'GRASS', then click the 'OK' button to create a new project")
 
 - Click `Setup Scene`
-
-xxx
 
 - Click `Transport classes`
 
