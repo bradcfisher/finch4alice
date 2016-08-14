@@ -38,10 +38,9 @@ high-level finchPlayRTTTL function provided by Finch 4 Alice to play an RTTTL ri
 
 ![Play RTTTL Example](images/readme/playRtttl.png "A UFO serenades you with a rendition of Greensleeves")
 
-If you prefer lower-level access to the Finch's buzzer, check out the []() project.  By calling the 
+If you prefer lower-level access to the Finch's buzzer, check out the [piano.a3p](piano.a3p?raw=true) project.  By utilizing the `finchBuzz()` method, the Finch is turned into a musical instrument.
 
-TODO: Add a new example...
-
+![Piano Example](images/readme/piano.png "Try your hand at using the Finch as a piano")
 
 
 ## LED
@@ -72,6 +71,7 @@ numerically and visually.")
 If you're looking to exercise the Finch's obstacle sensing capabilities, try out the [obstacleSensors.a3p](obstacleSensors.a3p?raw=true) project.  A rugged Humvee braves the icy wilderness to demonstrate what happens when a Finch encounters objects in its path.
 
 ![Obstacle Sensors Example](images/readme/obstacleSensors.png "An ice-bound Humvee demonstrates the Finch's obstacle sensors")
+
 
 ## Temperature Sensor
 
