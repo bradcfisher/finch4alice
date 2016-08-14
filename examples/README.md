@@ -69,7 +69,9 @@ numerically and visually.")
 
 ## Obstacle Sensors
 
+If you're looking to exercise the Finch's obstacle sensing capabilities, try out the [obstacleSensors.a3p](obstacleSensors.a3p?raw=true) project.  A rugged Humvee braves the icy wilderness to demonstrate what happens when a Finch encounters objects in its path.
 
+![Obstacle Sensors Example](images/readme/obstacleSensors.png "An ice-bound Humvee demonstrates the Finch's obstacle sensors")
 
 ## Temperature Sensor
 
