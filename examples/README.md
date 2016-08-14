@@ -4,8 +4,7 @@
 This directory contains several example projects you can load into Alice after Finch 4 Alice is
 installed to demonstrate communication with a Finch robot.
 
-  - [All Sensors](#all-sensors)
-  - [Accelerometer](#accelerometer)
+  - [All Sensors / Accelerometer](#all-sensors--accelerometer)
   - [Buzzer](#buzzer)
   - [LED](#led)
   - [Light Sensors](#light-sensors)
@@ -13,21 +12,15 @@ installed to demonstrate communication with a Finch robot.
   - [Temperature Sensor](#temperature-sensor)
   - [Wheel Velocities](#wheel-velocities)
 
-## All Sensors
+## All Sensors / Accelerometer
 
 If you want to dive right in and see a demonstration of all of the Finch's onboard sensors in one
 example application, check out the [template.a3p](template.a3p?raw=true) project.  This project
 continuously displays the readings from the Finch's sensors, as well as demonstrating use of the
-Finch as a controller for interacting with an on-screen object.
+Finch to act as a controller by using the accelerometer orientation to manipulate an on-screen
+object.
 
 ![Sensors Example](images/readme/template.png "All the Finch's sensors at once")
-
-
-## Accelerometer
-
-orientation
-tapping
-etc...
 
 
 ## Buzzer
