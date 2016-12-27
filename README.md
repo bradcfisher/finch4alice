@@ -17,11 +17,11 @@ Finch 4 Alice provides a simple extension to Alice 3 that adds methods for contr
     * [Multi-platform installer](#multi-platform-installer)
     * [Manual installation](#manual-installation)
     * [Building the Jar file only](#building-the-jar-file-only)
-  * Additional build tasks for developers
+  * [Additional build tasks for developers](#additional-build-tasks-for-developers)
     * [Generating API documentation](#generating-api-documentation)
     * [Publishing documentation to GitHub](#publishing-documentation-to-github)
     * [Updating the Gradle wrapper version](#updating-the-gradle-wrapper-version)
-    * [Checking Gradle plugin versions for updates](#checking-gradle-plugin-versions-for-updates)
+    * [Checking Gradle plugins and dependencies for updates](#checking-gradle-plugins-and-dependencies-for-updates)
   * [Using Finch 4 Alice](#using-finch-4-alice)
     * [Confirming installation](#confirming-installation)
     * [Connecting to a Finch](#connecting-to-a-finch)
@@ -168,7 +168,7 @@ This section describes several additional Gradle tasks that are of interest to d
 Documentation of the Finch4Alice API can be generated using the following command:
 
 ```
-./gradlew javadoc`
+./gradlew javadoc
 ```
 
 The generated documentation is placed under `build\docs\javadoc`.
@@ -195,7 +195,7 @@ The Gradle version used by `gradlew` can be updated by executing the following t
 ./gradlew wrapper --gradle-version <NEW GRADLE VERSION>
 ```
 
-### Checking Gradle plugin versions for updates
+### Checking Gradle plugins and dependencies for updates
 
 To check for out of date dependency versions, execute the following task:
 

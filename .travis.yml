@@ -12,6 +12,12 @@ addons:
     packages:
       - oracle-java8-installer
 
+# Download and extract Alice 3 for Linux
+install:
+  - wget http://www.alice.org/downloads/installers/Alice3_unix_3_3_0.sh
+  - chmod u+x ./Alice3_unix_3_3_0.sh
+  - ./Alice3_unix_3_3_0.sh -q
+
 # Ensure Gradle cache folders are cleaned up
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
