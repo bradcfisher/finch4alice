@@ -1,0 +1,32 @@
+# Use container-based build
+sudo: false
+
+# Build using JDK 8 environment
+language: java
+jdk:
+  - oraclejdk8
+
+# Ensure the newest java8 is installed in the container
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
+
+# Ensure Gradle cache folders are cleaned up
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+# Don't perform builds on GitHub Pages branch
+# (it's disabled by default, but doesn't hurt to be explicit)
+branches:
+  except:
+    - gh-pages
+
+# The script to execute for the build
+script: ./gradlew izPackCreateInstaller

@@ -2,7 +2,7 @@
 plugins {
 	id "java"
 	id "com.bmuschko.izpack" version "2.1"	// For building cross-platform installer
-	id "org.ajoberstar.github-pages" version "1.4.2"
+	id "org.ajoberstar.github-pages" version "1.6.0"
 	id 'edu.sc.seis.launch4j' version '1.6.2'
 	id 'com.github.ben-manes.versions' version '0.13.0'
 }
@@ -117,7 +117,7 @@ dependencies {
 	provided aliceLibJars()
 
 	// The production code uses the SLF4J logging API at compile time
-	compile 'org.slf4j:slf4j-api:1.7.21'
+	compile 'org.slf4j:slf4j-api:1.7.22'
 
 	// Declare the dependency for your favourite test framework you want to use in your tests.
 	// TestNG is also supported by the Gradle Test task. Just change the
@@ -127,7 +127,7 @@ dependencies {
 
 	// Building izpack installer requires this
 	// It provides the underlying Ant plugin and compiler used to build the installer, among other things
-	izpack 'org.codehaus.izpack:izpack-ant:5.0.9'
+	izpack 'org.codehaus.izpack:izpack-ant:5.0.10'
 
 }
 
