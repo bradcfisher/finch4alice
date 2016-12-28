@@ -7,15 +7,15 @@ matrix:
     sudo: false
     # Build using JDK 8 environment
     jdk: oraclejdk8
-    # Ensure the newest java8 is installed
     addons:
       apt:
         packages:
+          # Ensure the newest java8 is installed
           - oracle-java8-installer
-          # launch4j 3.9 currently ships with a 32bit Linux winres binary,
+          # launch4j 3.9 currently ships with a 32bit winres binary for Linux,
           # which requires 32bit libraries to be installed on a 64bit system
-          # The following should work for Ubuntu 14.04, but 16.04 will require "lib32z1"
-          - ia32-libs
+          # The following should work for both Ubuntu 14.04 and 16.04 
+          - lib32z1
     # Download and extract Alice 3
     install:
       - wget http://www.alice.org/downloads/installers/Alice3_unix_3_3_0.sh && sh ./Alice3_unix_3_3_0.sh -q
@@ -26,7 +26,7 @@ matrix:
     # Download and extract Alice 3
     install:
       - wget http://www.alice.org/downloads/installers/Alice3_macos_3_3_0.dmg
-      - MOUNTDIR=$(echo `hdiutil mount ./Alice3_macos_3_3_0.dmg | tail -1 | awk '{$1=$2=""; print $0}'` | xargs -0 echo)
+      - MOUNTDIR=$(hdiutil mount ./Alice3_macos_3_3_0.dmg | head -n 1 | cut -s -f 3)
       - hdiutil mount ./Alice3_macos_3_3_0.dmg
       - echo "DMG mount dir=${MOUNTDIR}"
       - ls -al "${MOUNTDIR}"
