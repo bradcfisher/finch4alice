@@ -1,24 +1,21 @@
-os:
-  - linux
-  - osx
-
-# Use container-based build if possible (not osx)
-sudo: false
-
 language: java
 
-# Build using JDK 8 environment (not supported for OSX, JDK is selected based on osx_image)
-jdk:
-  - oraclejdk8
+matrix:
+  include:
+  - os: linux
+    # Use container-based build
+    sudo: false
+    # Build using JDK 8 environment
+    jdk: oraclejdk8
+    # Ensure the newest java8 is installed
+    addons:
+      apt:
+        packages:
+          - oracle-java8-installer
 
-# USe the XCode 8.2 OSX image
-osx_image: xcode8.2
-
-# Ensure the newest java8 is installed in the Linux container
-addons:
-  apt:
-    packages:
-      - oracle-java8-installer
+  - os: osx
+    # Use the XCode 8.2 OSX image
+    osx_image: xcode8.2
 
 # Download and extract Alice 3
 install:
