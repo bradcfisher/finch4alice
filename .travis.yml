@@ -27,10 +27,7 @@ matrix:
     install:
       - wget http://www.alice.org/downloads/installers/Alice3_macos_3_3_0.dmg
       - MOUNTDIR=$(hdiutil mount ./Alice3_macos_3_3_0.dmg | head -n 1 | cut -s -f 3)
-      - hdiutil mount ./Alice3_macos_3_3_0.dmg
-      - echo "DMG mount dir=${MOUNTDIR}"
-      - ls -al "${MOUNTDIR}"
-      - sudo "${MOUNTDIR}/Alice 3 Installer.app/Contents/MacOS/JavaApplicationStub -q"
+      - sudo "${MOUNTDIR}/Alice 3 Installer.app/Contents/MacOS/JavaApplicationStub" -q
 
 # Ensure Gradle cache folders are cleaned up
 before_cache:
