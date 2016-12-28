@@ -12,17 +12,25 @@ matrix:
       apt:
         packages:
           - oracle-java8-installer
+          # launch4j 3.9 currently ships with a 32bit Linux winres binary,
+          # which requires 32bit libraries to be installed on a 64bit system
+          # The following should work for Ubuntu 14.04, but 16.04 will require "lib32z1"
+          - ia32-libs
+    # Download and extract Alice 3
+    install:
+      - wget http://www.alice.org/downloads/installers/Alice3_unix_3_3_0.sh && sh ./Alice3_unix_3_3_0.sh -q
 
   - os: osx
     # Use the XCode 8.2 OSX image
     osx_image: xcode8.2
-
-# Download and extract Alice 3
-install:
-  # Linux
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then wget http://www.alice.org/downloads/installers/Alice3_unix_3_3_0.sh && sh ./Alice3_unix_3_3_0.sh -q; fi
-  # OS X
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then wget http://www.alice.org/downloads/installers/Alice3_macos_3_3_0.dmg && MOUNTDIR=$(echo `hdiutil mount ./Alice3_macos_3_3_0.dmg | tail -1 | awk '{$1=$2=""; print $0}'` | xargs -0 echo) && echo "DMG mount dir=${MOUNTDIR}" && ls -al "${MOUNTDIR}" && sudo "${MOUNTDIR}/Alice 3 Installer.app/Contents/MacOS/JavaApplicationStub -q"; fi
+    # Download and extract Alice 3
+    install:
+      - wget http://www.alice.org/downloads/installers/Alice3_macos_3_3_0.dmg
+      - MOUNTDIR=$(echo `hdiutil mount ./Alice3_macos_3_3_0.dmg | tail -1 | awk '{$1=$2=""; print $0}'` | xargs -0 echo)
+      - hdiutil mount ./Alice3_macos_3_3_0.dmg
+      - echo "DMG mount dir=${MOUNTDIR}"
+      - ls -al "${MOUNTDIR}"
+      - sudo "${MOUNTDIR}/Alice 3 Installer.app/Contents/MacOS/JavaApplicationStub -q"
 
 # Ensure Gradle cache folders are cleaned up
 before_cache:

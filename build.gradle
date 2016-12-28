@@ -3,7 +3,7 @@ plugins {
 	id "java"
 	id "com.bmuschko.izpack" version "2.1"	// For building cross-platform installer
 	id "org.ajoberstar.github-pages" version "1.6.0"
-	id 'edu.sc.seis.launch4j' version '1.6.2'
+	id 'edu.sc.seis.launch4j' version '2.1.0'
 	id 'com.github.ben-manes.versions' version '0.13.0'
 }
 
@@ -170,29 +170,29 @@ izpack {
 }
 
 launch4j {
-  //mainClassName = 'com.example.myapp.Start'
-  //icon = 'icons/myApp.ico'
-  outfile = "${project.name}-${project.version}-setup.exe"
-  copyright = "Copyright (c) 2015, Brad Fisher"
-  jar = project.izpackJar
+	//mainClassName = 'com.example.myapp.Start'
+	//icon = 'icons/myApp.ico'
+	outfile = "${project.name}-${project.version}-setup.exe"
+	copyright = "Copyright (c) 2015, Brad Fisher"
+	jar = project.izpackJar
+	version = project.version.replace('-SNAPSHOT', '')
+	textVersion = project.version
 }
 
-afterEvaluate {
-	tasks.createExeWithBin.dependsOn(izPackCreateInstaller)
-	tasks.createExeWithJar.dependsOn(izPackCreateInstaller)
 
-	tasks.launch4j.doLast {
-		copy {
-			into "$buildDir/distributions"
-			from (launch4j.outputDir) {
-				include "*.exe"
-			}
-		}
-	}
+task copyExeToDistributions(type: Copy) {
+	from files(
+		tasks.withType(edu.sc.seis.launch4j.tasks.Launch4jLibraryTask).each({
+			"${buildDir}/${it.outputDir}"
+		})
+	)
+	into "${buildDir}/distributions"
+	include "*.exe"
+}
 
-	// The following is required to ensure the doLast added above is run.
-	// Without it, the launch4j task is always seen as up-to-date.
-	tasks.launch4j.outputs.upToDateWhen() { return false }
+tasks.withType(edu.sc.seis.launch4j.tasks.Launch4jLibraryTask) {
+	dependsOn(izPackCreateInstaller)
+	finalizedBy(copyExeToDistributions)
 }
 
 // Configure the 'prepareGhPages' and 'publishGhPages' tasks for updating the javadoc on gh-pages
