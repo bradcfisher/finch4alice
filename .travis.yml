@@ -1,22 +1,31 @@
-# Use container-based build
+os:
+  - linux
+  - osx
+
+# Use container-based build if possible (not osx)
 sudo: false
 
-# Build using JDK 8 environment
 language: java
+
+# Build using JDK 8 environment (not supported for OSX, JDK is selected based on osx_image)
 jdk:
   - oraclejdk8
 
-# Ensure the newest java8 is installed in the container
+# USe the XCode 8.2 OSX image
+osx_image: xcode8.2
+
+# Ensure the newest java8 is installed in the Linux container
 addons:
   apt:
     packages:
       - oracle-java8-installer
 
-# Download and extract Alice 3 for Linux
+# Download and extract Alice 3
 install:
-  - wget http://www.alice.org/downloads/installers/Alice3_unix_3_3_0.sh
-  - chmod u+x ./Alice3_unix_3_3_0.sh
-  - ./Alice3_unix_3_3_0.sh -q
+  # Linux
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then wget http://www.alice.org/downloads/installers/Alice3_unix_3_3_0.sh && sh ./Alice3_unix_3_3_0.sh -q; fi
+  # OS X
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then wget http://www.alice.org/downloads/installers/Alice3_macos_3_3_0.dmg && MOUNTDIR=$(echo `hdiutil mount ./Alice3_macos_3_3_0.dmg | tail -1 | awk '{$1=$2=""; print $0}'` | xargs -0 echo) && echo "DMG mount dir=${MOUNTDIR}" && ls -al "${MOUNTDIR}" && sudo "${MOUNTDIR}/Alice 3 Installer.app/Contents/MacOS/JavaApplicationStub -q"; fi
 
 # Ensure Gradle cache folders are cleaned up
 before_cache:
@@ -35,4 +44,16 @@ branches:
     - gh-pages
 
 # The script to execute for the build
-script: ./gradlew izPackCreateInstaller
+script: ./gradlew izPackCreateInstaller launch4j
+
+deploy:
+  provider: releases
+  api_key:
+    secure: "GIKoC+6BFF0a2vmdrOGIqfObkh3nJ7c48Y5DiHOlTuqFzcamaFz2kVeFxbkXSsW1GD8dH1/gjJv/k+oxK3lT6zHeLoJJsQU7dAlF/csxyU0QRTyOnmfLk1Px9hJ/pU2iqPpv4UCNoiCcHt/MTUjHsWKFXLSGA1hdVDy0rLE2zFwDSq/sR69KpuXIkelqx8KSULT0Y13PSW+IBfNui/Jx8vhWjritdpkHFeZrPTtQZfn8e1Tg2eqppiBgXXIHM6D0jqWJv8hlIUJAE0lpwlQgZ1CoYpJ8Xf3z454pQIUFp+iiIuoeRXzQoFtqwAO2nJb3xbPaTuw/NgR2G8EKEblqDJh6RKXOgOaDBOAxM7bnKSSe4m895IsF3GUeMG22Ol9lLNXBvPRzX3nPrG9dkTDtmYHO4as8E/m4pbHkggeW9/zDBX9e8mnVtw148WGlMoG5XYzV8qgjWf67k4nedJp82WGiWOe/NebJHcnVe7UplQimBWNyX9yTpmFG8pGIj0UboypiToNMKFnqtkUeo94RpABq+bl9SmK7v2WMNkzKLwkLAqhSyuEum1mXy7+e+9Rt1Hwg9rV7k+152BEiV2t9oHzFAGcl86qFL5IEE7ej6IV6bfp0ygQtoUwJUgRYrZTxyEyzegdwxjYOuoI9rsQUdU7VMOHpNT03mPNlIyd79KI="
+  file:
+    - build/distributions/finch4alice-*-installer.jar
+    - build/distributions/finch4alice-*-setup.exe
+  file_glob: true
+  skip_cleanup: true
+  on:
+    tags: true
