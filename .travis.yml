@@ -1,5 +1,3 @@
-language: java
-
 matrix:
   include:
   - os: linux
@@ -18,7 +16,8 @@ matrix:
           - lib32z1
     # Download and extract Alice 3
     install:
-      - wget http://www.alice.org/downloads/installers/Alice3_unix_3_3_0.sh && sh ./Alice3_unix_3_3_0.sh -q
+      - wget http://www.alice.org/downloads/installers/Alice3_unix_3_3_0.sh
+      - sh ./Alice3_unix_3_3_0.sh -q
 
   - os: osx
     # Use the XCode 8.2 OSX image
@@ -28,6 +27,10 @@ matrix:
       - wget http://www.alice.org/downloads/installers/Alice3_macos_3_3_0.dmg
       - MOUNTDIR=$(hdiutil mount ./Alice3_macos_3_3_0.dmg | head -n 1 | cut -s -f 3)
       - sudo "${MOUNTDIR}/Alice 3 Installer.app/Contents/MacOS/JavaApplicationStub" -q
+
+# Items below this point apply to all configurations in the matrix
+
+language: java
 
 # Ensure Gradle cache folders are cleaned up
 before_cache:
@@ -46,8 +49,10 @@ branches:
     - gh-pages
 
 # The script to execute for the build
-script: ./gradlew izPackCreateInstaller launch4j
+# Builds the installer Jar and Windows executable
+script: ./gradlew izPackCreateInstaller createExe
 
+# Configuration for GitHub releases deployment
 deploy:
   provider: releases
   api_key:
@@ -58,4 +63,7 @@ deploy:
   file_glob: true
   skip_cleanup: true
   on:
+    # Only deploy from the Linux build
+    condition: "$TRAVIS_OS_NAME" = "linux"
+    # Only deploy when building tags
     tags: true
