@@ -18,6 +18,10 @@ matrix:
     install:
       - wget http://www.alice.org/downloads/installers/Alice3_unix_3_3_0.sh
       - sh ./Alice3_unix_3_3_0.sh -q
+    # The script to execute for the build
+    # Builds the installer Jar, shell wrapper, Windows executable, and validates installation options
+    script:
+      - ./gradlew izPackCreateInstaller createShellWrapper createExe install installIzPack installShellWrapper
 
   - os: osx
     # Use the XCode 8.2 OSX image
@@ -27,6 +31,12 @@ matrix:
       - wget http://www.alice.org/downloads/installers/Alice3_macos_3_3_0.dmg
       - MOUNTDIR=$(hdiutil mount ./Alice3_macos_3_3_0.dmg | head -n 1 | cut -s -f 3)
       - sudo "${MOUNTDIR}/Alice 3 Installer.app/Contents/MacOS/JavaApplicationStub" -q
+    # The script to execute for the build
+    # Builds the installer Jar, shell wrapper, Windows executable, and validates installation options
+    # OS X requires sudo for the install
+    script:
+      - ./gradlew izPackCreateInstaller createShellWrapper createExe
+      - sudo ./gradlew install installIzPack installShellWrapper
 
 # Items below this point apply to all configurations in the matrix
 
@@ -48,13 +58,6 @@ branches:
   except:
     - gh-pages
 
-# The script to execute for the build
-# Builds the installer Jar, shell wrapper, Windows executable, and validates installation options
-script:
-  - ./gradlew izPackCreateInstaller createShellWrapper createExe
-  - ./gradlew install installIzPack
-  - if [ "$TRAVIS_OS_NAME" = "linux" -o "$TRAVIS_OS_NAME" = "osx" ]; then ./gradlew installShellWrapper; fi
-
 # Configuration for GitHub releases deployment
 deploy:
   provider: releases
@@ -70,3 +73,5 @@ deploy:
     condition: "$TRAVIS_OS_NAME = linux"
     # Only deploy when building tags
     tags: true
+    # Only deploy when building for the offical repo
+    repo: bradcfisher/finch4alice
