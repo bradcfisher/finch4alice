@@ -7,7 +7,7 @@ plugins {
 	id 'com.github.ben-manes.versions' version '0.13.0'
 }
 
-version = "0.3-SNAPSHOT"
+version = "0.3"
 ext.title = "Finch 4 Alice"
 description = "Enhances Alice 3 STransport subclasses to include methods for interacting with the Finch robot"
 
