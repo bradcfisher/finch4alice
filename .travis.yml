@@ -49,8 +49,11 @@ branches:
     - gh-pages
 
 # The script to execute for the build
-# Builds the installer Jar and Windows executable
-script: ./gradlew izPackCreateInstaller createExe
+# Builds the installer Jar, shell wrapper, Windows executable, and validates installation options
+script:
+  - ./gradlew izPackCreateInstaller createShellWrapper createExe
+  - ./gradlew install installIzPack
+  - if [ "$TRAVIS_OS_NAME" = "linux" -o "$TRAVIS_OS_NAME" = "osx" ]; then ./gradlew installShellWrapper; fi
 
 # Configuration for GitHub releases deployment
 deploy:

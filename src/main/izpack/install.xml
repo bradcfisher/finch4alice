@@ -48,8 +48,15 @@
 				</condition>
 				<condition type="and">
 					<condition type="ref" refid="izpack.linuxinstall"/>
-					<condition type="exists">
-						<file>${INSTALL_PATH}/Alice3</file>
+					<condition type="or">
+						<!-- Alice 3.2 -->
+						<condition type="exists">
+							<file>${INSTALL_PATH}/Alice3</file>
+						</condition>
+						<!-- Alice 3.3 -->
+						<condition type="exists">
+							<file>${INSTALL_PATH}/Alice 3</file>
+						</condition>
 					</condition>
 				</condition>
 			</condition>
