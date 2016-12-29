@@ -6,15 +6,18 @@ Ever wanted to control your [Finch robot](http://www.finchrobot.com/) from withi
 
 Finch 4 Alice provides a simple extension to Alice 3 that adds methods for controlling a Finch robot to all Transport subclass instances.  Cross-platform support is provided out-of-box for Microsoft Windows, Apple Macintosh OS X, and Linux operating systems.
 
-# Contents
+## Contents
 
-* [Installation and Building the Project](#installation-and-building-the-project)
-  * [Build Prerequisites](#build-prerequisites)
+* [Obtaining Finch 4 Alice](#obtaining-finch-4-alice)
+* [Building the project](#building-the-project)
+  * [Build prerequisites](#build-prerequisites)
     * [Alice 3](#alice-3)
     * [JDK](#jdk)
-  * [Installation](#installation)
+  * [Common tasks](#common-tasks)
     * [Direct install](#direct-install)
-    * [Multi-platform installer](#multi-platform-installer)
+    * [Multi-platform installer Jar](#multi-platform-installer-jar)
+    * [Windows executable installer](#windows-executable-installer)
+    * [Shell wrapper script](#shell-wrapper-script)
     * [Manual installation](#manual-installation)
     * [Building the Jar file only](#building-the-jar-file-only)
   * [Additional build tasks for developers](#additional-build-tasks-for-developers)
@@ -22,20 +25,26 @@ Finch 4 Alice provides a simple extension to Alice 3 that adds methods for contr
     * [Publishing documentation to GitHub](#publishing-documentation-to-github)
     * [Updating the Gradle wrapper version](#updating-the-gradle-wrapper-version)
     * [Checking Gradle plugins and dependencies for updates](#checking-gradle-plugins-and-dependencies-for-updates)
-  * [Using Finch 4 Alice](#using-finch-4-alice)
-    * [Confirming installation](#confirming-installation)
-    * [Connecting to a Finch](#connecting-to-a-finch)
-      * [Prerequisites](#prerequisites)
-      * [Example project walkthrough](#example-project)
-	  * [Bundled example projects](examples)
-  * [How it works](#how-it-works)
-    * [Additions to the STransport API](#additions-to-the-stransport-api)
-  * [Troubleshooting FAQ](#troubleshooting-faq)
-  * [Contributing](#contributing)
-  * [Bugs and Features Requests](#bugs-and-features-requests)
-  * [Disclaimers & License](#disclaimers--license)
+* [Using Finch 4 Alice](#using-finch-4-alice)
+  * [Confirming installation](#confirming-installation)
+  * [Connecting to a Finch](#connecting-to-a-finch)
+    * [Prerequisites](#prerequisites)
+    * [Example project walkthrough](#example-project)
+    * [Bundled example projects](examples)
+* [How it works](#how-it-works)
+  * [Additions to the STransport API](#additions-to-the-stransport-api)
+* [Troubleshooting FAQ](#troubleshooting-faq)
+* [Contributing](#contributing)
+* [Bugs and Features Requests](#bugs-and-features-requests)
+* [Disclaimers & License](#disclaimers--license)
 
-## Installation and Building the Project
+## Obtaining Finch 4 Alice
+
+Most users will probably be most interested in the [latest release](https://github.com/bradcfisher/finch4alice/releases/latest).  All binary and source code releases of Finch 4 Alice can be obtained from the project's [GitHub releases](https://github.com/bradcfisher/finch4alice/releases) page.
+
+If you are a developer, or are interested in using the current pre-release code, you can make [a local copy of Finch 4 Alice](#a-local-copy-of-finch-4-alice) GitHub repository.
+
+## Building the Project
 
 ### Build Prerequisites
 
@@ -59,11 +68,17 @@ You must have the Java Development Kit (JDK) version 1.8 or newer installed and 
 
 #### A local copy of Finch 4 Alice
 
-To build Finch 4 Alice, you mush have a local copy of the source code.  You can obtain the source from [GitHub](https://github.com/) using any [Git](https://git-scm.com/) client, or download a [zip archive of the current source](https://github.com/bradcfisher/finch4alice/archive/master.zip) and extract with your favorite archive application.
+To build Finch 4 Alice, you mush have a local copy of the source code.  You can obtain the source from the [Finch 4 Alice GitHub repository](https://github.com/bradcfisher/finch4alice) using any [Git](https://git-scm.com/) client, or download a [zip archive of the current source](https://github.com/bradcfisher/finch4alice/archive/master.zip) and extract with your favorite archive application.
 
-### Installation
+Using the standard git command line client, you can create a local clone of the Finch 4 Alice repository with the following command:
 
-Finch 4 Alice provides several installation options.  You can build and install the project [directly from the command line](#direct-install), [create an interactive multi-platform installer](#multi-platform-installer) to distribute and use on multiple machines, or you can [build the Jar only](#building-the-jar-file-only) for manual installation.
+```
+git clone https://github.com/bradcfisher/finch4alice.git
+```
+
+### Common tasks
+
+Several common tasks are available for building and installing Finch 4 Alice, including installing the project [directly from the command line](#direct-install), [creating an interactive multi-platform installer](#multi-platform-installer) to distribute and use on multiple machines, or [building the Jar only](#building-the-jar-file-only) for manual installation.
 
 #### Direct install
 
@@ -73,17 +88,29 @@ If you wish to install Finch 4 Alice on the build machine, it can be installed d
 ./gradlew install
 ```
 
-This will automatically perform the steps described under [Manual installation](#manual-installation).
+This will automatically perform the steps described under [Manual installation](#manual-installation), and is the lightest-weight installation option for installing from the Finch 4 Alice source.
 
 Because Alice is installed system-wide by default on Windows and Macintosh OS X, you will need to ensure you execute the command as Administrator (root on OS X) or the installation will likely fail due to lack of permissions.
 
 Under Linux, you should be able to run the install as a normal user, as long as Alice is installed in the default location under the current user's home directory.  If it is installed in a system-wide location like `/bin`, `/usr/bin`, or `/usr/local/bin` you will need to run the command as root using `sudo`: `sudo ./gradlew install`.
 
-#### Multi-platform installer
+Two alternatives exist to the above method, both of which generate and invoke the [multi-platform installer](#multi-platform-installer) automatically to perform the installation.  The first alternative method executes the generated installer Jar using the same Java runtime as used by Gradle, and is supported on all platforms.  Remember to execute the following command with administrator access on systems that require it.
 
-The installer application created using this method is the easiest to use for most end-users who do not have access to command line tools like Git and Gradle.  It provides an intuitive graphical installer that walks users through the installation process, doesn't require any special build tools to be installed on the target computer, and will run on all of the supported platforms with a properly configured [JRE](http://www.oracle.com/technetwork/java/javase/downloads/index-jsp-138363.html).
+```
+./gradlew installIzPack
+```
 
-Executing the following command in a shell prompt under the root of the Finch 4 Alice source will create a runnable installer Jar file:
+The second alternative executes a [shell script wrapper]() and is only supported on Linux and OS X, since Windows doesn't have native Unix shell support.  On OS X, the following following command will need to be executed with administrator access (sudo).
+
+```
+./gradlew installShellWrapper
+```
+
+#### Multi-platform installer Jar
+
+The runnable installer Jar created using this method is the easiest to use for most end-users who do not have access to command line tools like Git and Gradle.  It provides an intuitive graphical installer that walks users through the installation process, doesn't require any special build tools to be installed on the target computer, and will run on all of the supported platforms with a properly configured [JRE](http://www.oracle.com/technetwork/java/javase/downloads/index-jsp-138363.html).
+
+Executing the following command in a shell prompt under the root of the Finch 4 Alice source will create the installer Jar file:
 
 ```
 ./gradlew izPackCreateInstaller
@@ -91,21 +118,39 @@ Executing the following command in a shell prompt under the root of the Finch 4 
 
 Once generated, you can find the installer under `build/distributions/finch4alice-<version>-installer.jar`.
 
-The installer Jar can be executed using the following command:
+The installer Jar can be [wrapped in a shell script](#shell-wrapper-script) to be executed on Linux or OS X, bundled as a [Windows executable](#windows-executable-installer), or it can be executed using the following command in any supported environment:
 
 ```
 java -jar finch4alice-<version>-installer.jar
 ```
 
-Depending on your operating system configuration, you may also have alternative launch options.  For example, on Mac OS X systems with the Oracle JDK installed, you can launch the installer jar directly from Finder by simply double-clicking on the icon.
+Depending on your operating system configuration, you may also have alternative launch options.  For example, on Mac OS X systems with the Oracle JDK installed, you can launch the installer Jar directly from Finder by simply double-clicking on the icon.  Ubuntu Linux systems also support double-clicking the icon to launch the installer, but the Jar file must have the executable bit set for that to work.
 
-A native Microsoft Windows executable installer can also be created from the installer Jar with the following command:
+#### Windows executable installer
+
+A native Microsoft Windows executable installer can be created from the installer Jar with the following command:
 
 ```
 ./gradlew launch4j
 ```
 
 The generated EXE will be placed under `build/distributions/finch4alice-<version>-setup.exe`.
+
+#### Shell wrapper script
+
+The following command can be used on Linux and OS X to create a shell wrapper script around the multi-platform installer Jar.
+
+```
+./gradlew createShellWrapper
+```
+
+The wrapper script can then be executed from terminal with:
+
+```
+sh ./build/distributions/finch4alice-<version>-installer.sh
+```
+
+For automating installations, the shell script will look for an `INSTALL_PATH` environment variable.  If such a variable is defined, the path conotained therein will be used as the destination folder for installing Finch 4 Alice.  The variable should contain the path to the Alice 3 installation which should be updated.  If `INSTALL_PATH` is not defined, the wrapper script will use the [standard Alice 3 installation path](#alice-3) for the current operating system.
 
 #### Manual installation
 
@@ -159,11 +204,11 @@ If Alice is installed in a non-standard path, you can specify the correct path b
 ./gradlew jar -PaliceDir=/path/to/alice3
 ```
 
-## Additional build tasks for developers
+### Additional build tasks for developers
 
 This section describes several additional Gradle tasks that are of interest to developers that want to contribute to the project.  Most users will probably want to skip ahead to [Using Finch 4 Alice](#using-finch-4-alice).
 
-### Generating API documentation
+#### Generating API documentation
 
 Documentation of the Finch4Alice API can be generated using the following command:
 
@@ -173,7 +218,7 @@ Documentation of the Finch4Alice API can be generated using the following comman
 
 The generated documentation is placed under `build\docs\javadoc`.
 
-### Publishing documentation to GitHub
+#### Publishing documentation to GitHub
 
 The documentation generated by the `javadoc` task can be published to finch4alice.com using the following command:
 
@@ -187,7 +232,7 @@ For the above command to succeed, you must have push access to the finch4alice G
 ./gradlew publishGhPages -PgitSshKey=<PATH TO YOUR SSH KEY>
 ```
 
-### Updating the Gradle wrapper version
+#### Updating the Gradle wrapper version
 
 The Gradle version used by `gradlew` can be updated by executing the following task:
 
@@ -195,7 +240,7 @@ The Gradle version used by `gradlew` can be updated by executing the following t
 ./gradlew wrapper --gradle-version <NEW GRADLE VERSION>
 ```
 
-### Checking Gradle plugins and dependencies for updates
+#### Checking Gradle plugins and dependencies for updates
 
 To check for out of date dependency versions, execute the following task:
 
@@ -223,7 +268,7 @@ To ensure that everything is installed and configured properly:
 
 ![Show System Properties Dialog](images/readme/show_system_properties_dialog.png "The 'Show System Properties' dialog")
 
-* Verify that the finch4alice jar is listed at the beginning of the class path.
+* Verify that the finch4alice Jar is listed at the beginning of the class path.
 
 ![System Property: java.class.path Dialog](images/readme/java_class_path_dialog.png "The 'System Property: java.class.path' dialog")
 

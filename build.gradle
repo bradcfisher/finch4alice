@@ -9,7 +9,7 @@ plugins {
 
 version = "0.3-SNAPSHOT"
 ext.title = "Finch 4 Alice"
-description = "Enhances Alice 3.2 STransport subclasses to include methods for interacting with the Finch robot"
+description = "Enhances Alice 3 STransport subclasses to include methods for interacting with the Finch robot"
 
 //sourceCompatibility = 1.7
 
@@ -197,6 +197,7 @@ tasks.withType(edu.sc.seis.launch4j.tasks.Launch4jLibraryTask) {
 
 task createShellWrapper() {
 	description = "Creates a shell script wrapper around the IzPack installer Jar"
+	group = "Installation"
 
 	inputs.file("${projectDir}/src/main/scripts/wrapper_stub.sh")
 	inputs.file(project.izpackJar)
@@ -217,6 +218,7 @@ task createShellWrapper() {
 
 task installIzPack(type: JavaExec, dependsOn: izPackCreateInstaller) {
 	description = "Executes the IzPack installer in unattended mode and installs to the configured Alice 3 target folder"
+	group = "Installation"
 	main = "-jar"
 	args = [ project.izpackJar, "-options-system" ]
 	systemProperty("INSTALL_PATH", aliceDir)
@@ -225,6 +227,7 @@ task installIzPack(type: JavaExec, dependsOn: izPackCreateInstaller) {
 
 task installShellWrapper(type: Exec, dependsOn: createShellWrapper) {
 	description = "Executes the IzPack installer using the shell wrapper script in unattended mode and installs to the configured Alice 3 target folder (not supported in Windows)"
+	group = "Installation"
 	environment = [ "INSTALL_PATH" : aliceDir ]
 	doFirst {
 		if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
@@ -236,6 +239,7 @@ task installShellWrapper(type: Exec, dependsOn: createShellWrapper) {
 
 task install(dependsOn: jar) {
 	description = "Directly installs Finch 4 Alice to the configured Alice 3 target folder"
+	group = "Installation"
 
 	// We use project.copy here instead of inheriting from the Copy task because we don't care
 	// about the up-to-date checks which the Copy task will perform.  Since the target folders
