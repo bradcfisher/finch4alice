@@ -13,6 +13,7 @@ Finch 4 Alice provides a simple extension to Alice 3 that adds methods for contr
   * [Build prerequisites](#build-prerequisites)
     * [Alice 3](#alice-3)
     * [JDK](#jdk)
+    * [A local copy of Finch 4 Alice](#a-local-copy-of-finch-4-alice)
   * [Common tasks](#common-tasks)
     * [Direct install](#direct-install)
     * [Multi-platform installer Jar](#multi-platform-installer-jar)
@@ -30,13 +31,13 @@ Finch 4 Alice provides a simple extension to Alice 3 that adds methods for contr
   * [Connecting to a Finch](#connecting-to-a-finch)
     * [Prerequisites](#prerequisites)
     * [Example project walkthrough](#example-project)
-    * [Bundled example projects](examples)
+  * [Bundled example projects](examples)
 * [How it works](#how-it-works)
   * [Additions to the STransport API](#additions-to-the-stransport-api)
 * [Troubleshooting FAQ](#troubleshooting-faq)
 * [Contributing](#contributing)
-* [Bugs and Features Requests](#bugs-and-features-requests)
-* [Disclaimers & License](#disclaimers--license)
+* [Bugs and feature requests](#bugs-and-feature-requests)
+* [Disclaimers and license](#disclaimers-and-license)
 
 ## Obtaining Finch 4 Alice
 
@@ -44,9 +45,9 @@ Most users will probably be most interested in the [latest release](https://gith
 
 If you are a developer, or are interested in using the current pre-release code, you can make [a local copy of Finch 4 Alice](#a-local-copy-of-finch-4-alice) GitHub repository.
 
-## Building the Project
+## Building the project
 
-### Build Prerequisites
+### Build prerequisites
 
 #### Alice 3
 
@@ -319,6 +320,8 @@ Now that you have Finch 4 Alice installed, what can you do with it?  In this sec
 
 - You are now ready to try running your test project.  Click the `Run` button and you should see the LED in the nose of your Finch turn red for two seconds, then turn off.
 
+## Bundled example projects
+
 > More example projects can be found in the [examples](examples) subfolder.
 
 ## How it works
@@ -359,11 +362,11 @@ To disable app nap for the BirdBrain Robot Server:
 
 Contributions are very welcome and are accepted through pull requests.  Simply create a [fork on GitHub](https://help.github.com/articles/fork-a-repo/), commit and push your updates to your fork under a new [branch](https://help.github.com/articles/managing-branches-in-your-repository/), and then [submit a pull request](https://help.github.com/articles/using-pull-requests/) for review.
 
-## Bugs and Features Requests
+## Bugs and feature requests
 
 Please submit all bug reports and feature requests to the project [issue tracker](../../issues/).
 
-## Disclaimers & License
+## Disclaimers and license
 
 The Finch 4 Alice project is not affiliated with either the Finch or Alice 3 projects or their respective intellectual property holders.
 
