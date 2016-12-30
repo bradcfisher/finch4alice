@@ -1,0 +1,8 @@
+title: Finch 4 Alice
+description: Provides an API within Alice 3 for interacting with a Finch robot
+google_analytics: UA-71822812-1
+show_downloads: true
+theme: jekyll-theme-architect
+
+gems:
+  - jekyll-mentions
