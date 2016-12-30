@@ -21,7 +21,7 @@ matrix:
     # The script to execute for the build
     # Builds the installer Jar, shell wrapper, Windows executable, and validates installation options
     script:
-      - ./gradlew izPackCreateInstaller createShellWrapper createExe install installIzPack installShellWrapper
+      - ./gradlew izPackCreateInstaller createShellWrapper createExe javadoc install installIzPack installShellWrapper
 
   - os: osx
     # Use the XCode 8.2 OSX image
@@ -35,8 +35,9 @@ matrix:
     # Builds the installer Jar, shell wrapper, Windows executable, and validates installation options
     # OS X requires sudo for the install
     script:
-      - ./gradlew izPackCreateInstaller createShellWrapper createExe
-      - sudo ./gradlew install installIzPack installShellWrapper
+      - ./gradlew --no-daemon izPackCreateInstaller createShellWrapper createExe javadoc
+      - sudo cp -r "$HOME/.gradle" ~root/.gradle
+      - sudo ./gradlew --no-daemon install installIzPack installShellWrapper
 
 # Items below this point apply to all configurations in the matrix
 
@@ -58,6 +59,10 @@ branches:
   except:
     - gh-pages
 
+before_install:
+  - openssl aes-256-cbc -K $encrypted_cc03a26e8457_key -iv $encrypted_cc03a26e8457_iv -in .travis.ghpages.enc -out .travis.ghpages -d
+  - chmod 0600 .travis.ghpages
+
 # Configuration for GitHub releases deployment
 deploy:
   provider: releases
@@ -65,6 +70,7 @@ deploy:
     secure: "GIKoC+6BFF0a2vmdrOGIqfObkh3nJ7c48Y5DiHOlTuqFzcamaFz2kVeFxbkXSsW1GD8dH1/gjJv/k+oxK3lT6zHeLoJJsQU7dAlF/csxyU0QRTyOnmfLk1Px9hJ/pU2iqPpv4UCNoiCcHt/MTUjHsWKFXLSGA1hdVDy0rLE2zFwDSq/sR69KpuXIkelqx8KSULT0Y13PSW+IBfNui/Jx8vhWjritdpkHFeZrPTtQZfn8e1Tg2eqppiBgXXIHM6D0jqWJv8hlIUJAE0lpwlQgZ1CoYpJ8Xf3z454pQIUFp+iiIuoeRXzQoFtqwAO2nJb3xbPaTuw/NgR2G8EKEblqDJh6RKXOgOaDBOAxM7bnKSSe4m895IsF3GUeMG22Ol9lLNXBvPRzX3nPrG9dkTDtmYHO4as8E/m4pbHkggeW9/zDBX9e8mnVtw148WGlMoG5XYzV8qgjWf67k4nedJp82WGiWOe/NebJHcnVe7UplQimBWNyX9yTpmFG8pGIj0UboypiToNMKFnqtkUeo94RpABq+bl9SmK7v2WMNkzKLwkLAqhSyuEum1mXy7+e+9Rt1Hwg9rV7k+152BEiV2t9oHzFAGcl86qFL5IEE7ej6IV6bfp0ygQtoUwJUgRYrZTxyEyzegdwxjYOuoI9rsQUdU7VMOHpNT03mPNlIyd79KI="
   file:
     - build/distributions/finch4alice-*-installer.jar
+    - build/distributions/finch4alice-*-installer.sh
     - build/distributions/finch4alice-*-setup.exe
   file_glob: true
   skip_cleanup: true
@@ -75,3 +81,7 @@ deploy:
     tags: true
     # Only deploy when building for the offical repo
     repo: bradcfisher/finch4alice
+
+# Publish the generated javadoc to GitHub pages
+after_deploy:
+  - ./gradlew publishGhPages -PgitSshKey=.travis.ghpages
