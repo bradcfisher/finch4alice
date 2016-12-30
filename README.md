@@ -259,19 +259,19 @@ To ensure that everything is installed and configured properly:
 
 * When prompted to load a project, simply close the dialog by clicking 'Cancel'.
 
-![Select Project Dialog](https://github.com/bradcfisher/finch4alice/images/readme/select_project_dialog.png "Click the 'Cancel' button to close this dialog")
+![Select Project Dialog](images/readme/select_project_dialog.png "Click the 'Cancel' button to close this dialog")
 
 * Select the `Help -> Show System Properties` menu
 
-![Show System Properties Menu](https://github.com/bradcfisher/finch4alice/images/readme/show_system_properties_menu.png "The 'Show System Properties' menu")
+![Show System Properties Menu](images/readme/show_system_properties_menu.png "The 'Show System Properties' menu")
 
 * Click `Show...` to the right of `java.class.path`
 
-![Show System Properties Dialog](https://github.com/bradcfisher/finch4alice/images/readme/show_system_properties_dialog.png "The 'Show System Properties' dialog")
+![Show System Properties Dialog](images/readme/show_system_properties_dialog.png "The 'Show System Properties' dialog")
 
 * Verify that the finch4alice Jar is listed at the beginning of the class path.
 
-![System Property: java.class.path Dialog](https://github.com/bradcfisher/finch4alice/images/readme/java_class_path_dialog.png "The 'System Property: java.class.path' dialog")
+![System Property: java.class.path Dialog](images/readme/java_class_path_dialog.png "The 'System Property: java.class.path' dialog")
 
 ### Connecting to a Finch
 
@@ -289,11 +289,11 @@ Now that you have Finch 4 Alice installed, what can you do with it?  In this sec
 
 - Start the BirdBrain Robot Server and connect your Finch robot.  The BirdBrain server window should look as follows when it detects a connected Finch:
 
-![The BirdBrain Robot Server with a connected Finch](https://github.com/bradcfisher/finch4alice/images/readme/birdbrain_connected_finch.png "The BirdBrain Robot Server with a connected Finch")
+![The BirdBrain Robot Server with a connected Finch](images/readme/birdbrain_connected_finch.png "The BirdBrain Robot Server with a connected Finch")
 
 - Launch Alice and when prompted to select a project, create a new project based on the 'GRASS' theme.
 
-![Select Project Dialog](https://github.com/bradcfisher/finch4alice/images/readme/select_project_dialog.png "Select 'GRASS', then click the 'OK' button to create a new project")
+![Select Project Dialog](images/readme/select_project_dialog.png "Select 'GRASS', then click the 'OK' button to create a new project")
 
 - Click `Setup Scene`
 
