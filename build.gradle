@@ -285,21 +285,15 @@ task install(dependsOn: jar) {
 javadoc {
 	def jdkSrc = (project.hasProperty('jdkSrc')
 					? jdkSrc
-					: "$System.env.JAVA_HOME/src")
+					: file(System.getProperty("java.home") +"/../src.zip").getCanonicalFile().toString());
 
 	doFirst {
 		if (!file(jdkSrc).exists()) {
 			println("WARNING: Could not find JDK source at '$jdkSrc'.")
-			if (file("${jdkSrc}.zip").exists()) {
-				println("    The file 'src.zip' was found under the JDK home folder.")
-				println("    Perhaps you need to extract it?")
-				println("    (eg. unzip -d ${jdkSrc} ${jdkSrc}.zip)")
-			} else {
-				println("    Unable to find a 'src.zip' under the JDK home folder!")
-				println("    Perhaps the JDK path was not detected correctly.")
-				println("    Try specifying the path to the JDK source via the 'jdkSrc'")
-				println("    property (eg. -PjdkSrc=/path/to/jdk/src).")
-			}
+			println("    Try specifying the path to the JDK source directory or Zip")
+			println("    via the 'jdkSrc' property (eg. -PjdkSrc=/path/to/jdk/src.zip).")
+		} else {
+			println("Building javadoc using JDK source at '$jdkSrc'...");
 		}
 	}
 
