@@ -339,7 +339,7 @@ One may wonder "Why not add a new type of object within Alice to represent a Fin
 
 Finch 4 Alice works by extending the STransport parent class within Alice.  Several new procedures and functions are added that expose the full range of functionality provided by the Finch robot.
 
- Check out [the Javadoc API](https://bradcfisher.github.io/finch4alice/api/0.4/) for the full API details.
+ Check out [the Javadoc API](https://bradcfisher.github.io/finch4alice/api/0.5/) for the full API details.
 
 ## Troubleshooting FAQ
 
