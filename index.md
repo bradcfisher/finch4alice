@@ -1,6 +1,7 @@
 # Finch 4 Alice
 
 [![Build Status](https://travis-ci.org/bradcfisher/finch4alice.png)](https://travis-ci.org/bradcfisher/finch4alice)
+[![license](https://img.shields.io/github/license/bradcfisher/finch4alice.svg)](https://github.com/bradcfisher/finch4alice/blob/master/LICENSE)
 
 Ever wanted to control your [Finch robot](http://www.finchrobot.com/) from within [Alice 3](http://www.alice.org/)?  Well, now you can!
 
