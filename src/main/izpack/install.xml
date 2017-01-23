@@ -16,9 +16,6 @@
 		<appname>@{app.title}</appname>
 		<appversion>@{app.version}</appversion>
 		<url>@{app.url}</url>
-		<authors>
-			<author name="Brad Fisher" email="fisher.brad@uwlax.edu"/>
-		</authors>
 <!--		<run-privileged condition="!izpack.linuxinstall" /> -->
 	</info>
 
@@ -65,6 +62,7 @@
 	
 	<guiprefs width="640" height="480" resizable="yes">
 		<modifier key="showDebugWindow" value="true"/>
+		<modifier key="paragraphYGap" value="25"/>
 	</guiprefs>
 
 	<locale>
@@ -77,6 +75,8 @@
 	-->
 	<resources>
 		<res id="CustomLangPack.xml_eng" src="../src/main/izpack/CustomLangPack.xml_eng" />
+
+		<res id="Installer.image" src="../src/main/izpack/finch4alice_installer_sideimage.png" />
 
 		<res id="LicencePanel.licence" src="../LICENSE"/>
 <!--		<res id="InfoPanel.info" src="../README.md"/> -->
