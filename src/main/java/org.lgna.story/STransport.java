@@ -13,6 +13,8 @@ import org.lgna.project.annotations.MethodTemplate;
 
 import com.finch4alice.*;
 
+import edu.cmu.ri.createlab.terk.robot.finch.Finch;
+
 /**
  * Override implementation of the org.lgna.story.STransport class which provides methods for
  * interacting with a Finch robot.
@@ -39,24 +41,23 @@ public class STransport
 	private static Object finchLock = new Object();
 
 	/**
-	 * FinchHTTP object instance used for communicating with the attached Finch robot.
+	 * Finch object instance used for communicating with the attached Finch robot.
 	 * Only one instance is maintained, regardless of how many STransport subclass instances are
-	 * created, and the BirdbrainRobotServer doesn't support multiple connected Finch robots
-	 * anyway.
+	 * created.
 	 */
-	private static FinchHTTP finch;
+	private static Finch finch;
 
 	/**
-	 * Retrieves the FinchHTTP instance maintained by this class.
+	 * Retrieves the Finch instance maintained by this class.
 	 * A new instance will be created if one has not yet been.
 	 *
-	 * @return	The FinchHTTP instance maintained by this class.
+	 * @return	The Finch instance maintained by this class.
 	 */
-	private FinchHTTP getFinch() {
+	private Finch getFinch() {
         synchronized (finchLock) {
             if (finch == null)
-                finch = new FinchHTTP();
-// TODO: Support specifying the server base URL...
+				finch = new Finch();
+
             return finch;
         }
     }
@@ -350,7 +351,7 @@ TODO: While we can add this method returning a Double[] (or double[]), it doesn'
 	@MethodTemplate
 	public String finchGetOrientation() {
 		synchronized (finchLock) {
-			return getFinch().getOrientation();
+			return "Level"; //getFinch().getOrientation();
 		}
 	}
 
@@ -367,7 +368,7 @@ TODO: While we can add this method returning a Double[] (or double[]), it doesn'
 	@MethodTemplate
 	public double finchGetXOrientationAngle() {
 		synchronized (finchLock) {
-			return getFinch().getXOrientationAngle();
+			return 0.0; //getFinch().getXOrientationAngle();
 		}
 	}
 
@@ -386,7 +387,7 @@ TODO: While we can add this method returning a Double[] (or double[]), it doesn'
 	@MethodTemplate
 	public double finchGetYOrientationAngle() {
 		synchronized (finchLock) {
-			return getFinch().getYOrientationAngle();
+			return 0.0; //getFinch().getYOrientationAngle();
 		}
 	}
 
@@ -496,7 +497,7 @@ TODO: While we can add this method returning a Double[] (or double[]), it doesn'
 	@MethodTemplate
 	public double finchGetTemperatureFahrenheit() {
 		synchronized (finchLock) {
-			return getFinch().getTemperatureFahrenheit();
+			return 0.0; //getFinch().getTemperatureFahrenheit();
 		}
 	}
 
@@ -643,7 +644,9 @@ TODO: While we can add this method returning a Double[] (or double[]), it doesn'
 	@MethodTemplate
 	public boolean finchIsConnected() {
 		synchronized (finchLock) {
-			return getFinch().isConnected();
+			//return getFinch().isConnected();
+// TODO: make this work as expected, if possible
+			return true;
 		}
 	}
 

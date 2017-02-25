@@ -5,6 +5,7 @@ plugins {
 	id "org.ajoberstar.github-pages" version "1.6.0"
 	id 'edu.sc.seis.launch4j' version '2.1.0'
 	id 'com.github.ben-manes.versions' version '0.13.0'
+	id "de.undercouch.download" version "3.2.0"
 }
 
 version = "0.5-SNAPSHOT"
@@ -116,6 +117,8 @@ dependencies {
 	// Determines the Alice library Jar paths
 	provided aliceLibJars()
 
+	compile files("$buildDir/libs/finch.jar")
+
 	// The production code uses the SLF4J logging API at compile time
 	compile 'org.slf4j:slf4j-api:1.7.22'
 
@@ -135,6 +138,24 @@ dependencies {
 sourceSets.main.compileClasspath += configurations.provided
 
 javadoc.classpath = sourceSets.main.compileClasspath
+
+import de.undercouch.gradle.tasks.download.Download
+task downloadFinchJar(type: Download) {
+    src 'http://www.finchrobot.com/sites/default/files/Windows/FinchJava.zip'
+    dest new File(buildDir, 'FinchJava.zip')
+	onlyIfNewer true
+}
+task downloadAndUnzipFinchJar(dependsOn: downloadFinchJar, type: Copy) {
+	includeEmptyDirs = false
+	from zipTree(downloadFinchJar.dest)
+	eachFile { FileCopyDetails details ->
+		// Remove subdirs from path
+		details.path = details.path.substring(details.path.length() - 9);
+	}
+	include "/Finch Software/SourceFiles/finch.jar"
+	include "/Finch Software/SourceFiles/civil.dll"
+	into file("$buildDir/libs")
+}
 
 jar {
     manifest {
@@ -156,6 +177,7 @@ ext.izpackProperties = [
 //		'app.subpath': "Finch4Alice-$version",
 	]
 
+tasks.compileJava.dependsOn(downloadAndUnzipFinchJar)
 
 // Ensure izPackCreateInstaller runs _after_ the jar task
 tasks.izPackCreateInstaller.dependsOn(jar)
@@ -266,6 +288,12 @@ task install(dependsOn: jar) {
 				into "ext/finch4alice"
 				include "finch4alice-*.jar"
 				rename ".*", "finch4alice.jar"
+			}
+
+			from("${buildDir.name}/libs") {
+				into "ext/finch4alice"
+				include "finch.jar"
+				include "civil.dll"
 			}
 		}
 
